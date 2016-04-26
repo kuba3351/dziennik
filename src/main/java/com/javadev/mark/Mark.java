@@ -12,7 +12,7 @@ import com.javadev.subject.Subject;
 @Entity
 public class Mark {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private
     long id;
     private int mark;

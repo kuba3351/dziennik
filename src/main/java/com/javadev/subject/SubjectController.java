@@ -1,17 +1,16 @@
 package com.javadev.subject;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by kuba3 on 25.04.2016.
  */
+@RestController
 public class SubjectController {
     @Autowired
     SubjectRepository subjectRepository;
@@ -36,6 +35,17 @@ public class SubjectController {
     {
         return subjectRepository.findAll();
     }
+    @RequestMapping(value = "/subjectsimple",method = RequestMethod.GET)
+    public List<String> displaySimple()
+    {
+        ArrayList<String> subjects = new ArrayList<>();
+        List<Subject> list = display();
+        for(int i = 0;i<list.size();i++)
+        {
+            subjects.add(list.get(i).getName());
+        }
+        return subjects;
+    }
     @RequestMapping(value="/subject/update/{id}",method=RequestMethod.PUT)
     public String update(@PathVariable long id, @RequestBody SubjectDTO subjectDTO)
     {
@@ -45,5 +55,15 @@ public class SubjectController {
             subjectRepository.save(subjectDTO.mapToEntity(id));
             return "updated";
         }
+    }
+    @RequestMapping(value="/subject/{id}",method= RequestMethod.GET)
+    @ResponseBody
+    public Subject show(@PathVariable long id) throws Exception
+    {
+        if(subjectRepository.exists(id)){
+            return subjectRepository.findOne(id);
+        }
+        else
+            throw new Exception("subject not found");
     }
 }

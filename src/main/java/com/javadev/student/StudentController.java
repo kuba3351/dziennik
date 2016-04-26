@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,6 +36,22 @@ public class StudentController {
     {
         return studentRepository.findAll();
     }
+    @RequestMapping(value = "/studentsimple",method = RequestMethod.GET)
+    public List<String> displaySimple()
+    {
+        ArrayList<String> students = new ArrayList<>();
+        List<Student> list = display();
+        for(int i = 0;i<list.size();i++)
+        {
+            StringBuilder builder = new StringBuilder();
+            Student student = list.get(i);
+            builder.append(student.getName());
+            builder.append(" ");
+            builder.append(student.getLastName());
+            students.add(builder.toString());
+        }
+        return students;
+    }
     @RequestMapping(value="/student/update/{id}",method=RequestMethod.PUT)
     public String update(@PathVariable long id, @RequestBody StudentDTO studentDTO)
     {
@@ -44,5 +61,15 @@ public class StudentController {
             studentRepository.save(studentDTO.mapToEntity(id));
             return "updated";
         }
+    }
+    @RequestMapping(value="/student/{id}",method= RequestMethod.GET)
+    @ResponseBody
+    public Student show(@PathVariable long id) throws Exception
+    {
+        if(studentRepository.exists(id)){
+            return studentRepository.findOne(id);
+        }
+        else
+            throw new Exception("student not found");
     }
 }

@@ -1,5 +1,7 @@
 package com.javadev.subject;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,25 +16,32 @@ import java.util.List;
 public class SubjectController {
     @Autowired
     SubjectRepository subjectRepository;
+    static Logger logger = LogManager.getLogger(SubjectController.class.getName());
     @RequestMapping(value="/subject/add",method= RequestMethod.POST)
     public String add(@RequestBody @Valid SubjectDTO subjectDTO)
     {
-        subjectRepository.save(subjectDTO.mapToEntity());
+        Subject subject = subjectDTO.mapToEntity();
+        logger.info("Request to add new subject: "+subject.getName());
+        logger.info("adding with given ID: "+subjectRepository.save(subject).getId());
         return "saved";
     }
     @RequestMapping(value="/subject/delete/{id}",method=RequestMethod.DELETE)
     public String delete(@PathVariable long id)
     {
         if(subjectRepository.exists(id)){
+            logger.info("Deleted subject with ID: "+id);
             subjectRepository.delete(id);
             return "deleted";
         }
-        else
+        else {
+            logger.warn("Request to deleted subject with ID: "+id+" whitch is not found!");
             return "subject not found";
+        }
     }
     @RequestMapping(value = "/subject",method = RequestMethod.GET)
     public List<Subject> display()
     {
+        logger.info("Request to show list of subjects");
         return subjectRepository.findAll();
     }
     @RequestMapping(value = "/subjectsimple",method = RequestMethod.GET)

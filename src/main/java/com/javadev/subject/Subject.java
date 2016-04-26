@@ -11,7 +11,7 @@ import javax.persistence.Id;
 @Entity
 public class Subject {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     private String name;
 

@@ -6,6 +6,8 @@ import com.javadev.subject.Subject;
 import com.javadev.subject.SubjectRepository;
 import com.javadev.teacher.Teacher;
 import com.javadev.teacher.TeacherRepository;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,12 +33,22 @@ public class MarkController {
     @Autowired
     SubjectRepository subjectRepository;
 
+    Logger logger = LogManager.getLogger(MarkController.class.getName());
+
     @RequestMapping("/mark/add")
     public String add(@RequestBody @Valid MarkDTO markDTO)
     {
-        System.out.println(markDTO.getStudentId()+" "+markDTO.getSubjectId()+" "+markDTO.getTeacherId());
-        markRepository.save(markDTO.mapToEntity(studentRepository.getOne(markDTO.getStudentId()),teacherRepository.getOne(markDTO.getTeacherId()),subjectRepository.getOne(markDTO.getSubjectId())));
-        return "added";
+        if(studentRepository.exists(markDTO.getStudentId()) && teacherRepository.exists(markDTO.getTeacherId()) && subjectRepository.exists(markDTO.getSubjectId())) {
+            Mark mark = markDTO.mapToEntity(studentRepository.getOne(markDTO.getStudentId()), teacherRepository.getOne(markDTO.getTeacherId()), subjectRepository.getOne(markDTO.getSubjectId()));
+            logger.info("Request to add mark: " + markDTO.getMark() + " with student ID: " + markDTO.getStudentId() + " Teacher ID: " + markDTO.getTeacherId() + " subject ID:" + markDTO.getSubjectId());
+            logger.info("Addning with ID: " + markRepository.save(mark).getId());
+            return "added";
+        }
+        else
+        {
+            logger.warn("Bad Request to add mark: " + markDTO.getMark() + " with student ID: " + markDTO.getStudentId() + " Teacher ID: " + markDTO.getTeacherId() + " subject ID:" + markDTO.getSubjectId());
+            return "Bad request";
+        }
     }
     @RequestMapping(value = "/mark", method = RequestMethod.GET)
     public List<Mark> show()
@@ -47,11 +59,14 @@ public class MarkController {
     public String delete(@PathVariable long id)
     {
         if(markRepository.exists(id)){
+            logger.info("Request to delete mark with ID: "+id);
             markRepository.delete(id);
             return "deleted";
         }
-        else
+        else {
+            logger.warn("Request to delete mark with ID: "+id+" whitch is not found!");
             return "mark not found";
+        }
     }
     @RequestMapping(value="/mark/find",method = RequestMethod.POST)
     public List<Mark> find(@RequestBody MarkDTO markDTO)

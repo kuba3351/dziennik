@@ -1,5 +1,7 @@
 package com.javadev.teacher;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,10 +16,14 @@ import java.util.List;
 public class TeacherController {
     @Autowired
     TeacherRepository teacherRepository;
+    static Logger logger = LogManager.getLogger(TeacherController.class.getName());
+
     @RequestMapping(value="/teacher/add",method=RequestMethod.POST)
     public String add(@RequestBody @Valid TeacherDTO teacherDTO)
     {
-        teacherRepository.save(teacherDTO.mapToEntity());
+        Teacher teacher = teacherDTO.mapToEntity();
+        logger.info("Request to add new teacher: "+teacher.getName()+" "+teacher.getLastName());
+        logger.info("Adding new teacher with given ID: "+teacherRepository.save(teacher));
         return "saved";
     }
     @RequestMapping(value="/teacher/delete/{id}",method=RequestMethod.DELETE)
@@ -25,14 +31,18 @@ public class TeacherController {
     {
         if(teacherRepository.exists(id)){
             teacherRepository.delete(id);
+            logger.info("deleted teacher with ID:"+id);
             return "deleted";
         }
-        else
+        else {
+            logger.warn("Request to delete teacher with ID: "+id+" which is not found!");
             return "teacher not found";
+        }
     }
     @RequestMapping(value = "/teacher",method = RequestMethod.GET)
     public List<Teacher> display()
     {
+        logger.info("request to show list of teachers");
         return teacherRepository.findAll();
     }
     @RequestMapping(value = "/teachersimple",method = RequestMethod.GET)
@@ -69,6 +79,6 @@ public class TeacherController {
             return teacherRepository.findOne(id);
         }
         else
-            throw new Exception("student not found");
+            throw new Exception("teacher not found");
     }
 }

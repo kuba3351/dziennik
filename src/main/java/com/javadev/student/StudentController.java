@@ -1,12 +1,14 @@
 package com.javadev.student;
 
 import com.javadev.student.StudentRepository;
+import org.apache.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  * Created by kuba3 on 25.04.2016.
@@ -15,25 +17,33 @@ import java.util.List;
 public class StudentController {
     @Autowired
     StudentRepository studentRepository;
+    static Logger logger = LogManager.getLogger(StudentController.class.getName());
     @RequestMapping(value="/student/add",method=RequestMethod.POST)
     public String add(@RequestBody @Valid StudentDTO studentDTO)
     {
-        studentRepository.save(studentDTO.mapToEntity());
+
+        Student student = studentDTO.mapToEntity();
+        logger.info("Request to add student: "+student.getName()+" "+student.getLastName());
+        logger.info("Adding student. Given ID is: "+studentRepository.save(student).getId());
         return "saved";
     }
     @RequestMapping(value="/student/delete/{id}",method= RequestMethod.DELETE)
     public String delete(@PathVariable long id)
     {
         if(studentRepository.exists(id)){
+            logger.info("Deleting student with ID:"+id);
             studentRepository.delete(id);
             return "deleted";
         }
-        else
+        else {
+            logger.warn("Request to delete student With ID: "+id+" whitch is not found!");
             return "student not found";
+        }
     }
     @RequestMapping(value = "/student",method = RequestMethod.GET)
     public List<Student> display()
     {
+        logger.info("Request to show list of students");
         return studentRepository.findAll();
     }
     @RequestMapping(value = "/studentsimple",method = RequestMethod.GET)

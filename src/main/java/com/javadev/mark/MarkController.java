@@ -38,7 +38,7 @@ public class MarkController {
     @RequestMapping("/mark/add")
     public String add(@RequestBody @Valid MarkDTO markDTO)
     {
-        if(studentRepository.exists(markDTO.getStudentId()) && teacherRepository.exists(markDTO.getTeacherId()) && subjectRepository.exists(markDTO.getSubjectId())) {
+        if(studentRepository.exists(markDTO.getStudentId()) && teacherRepository.exists(markDTO.getTeacherId()) && subjectRepository.exists(markDTO.getSubjectId()) && markDTO.getMark() >= 1 && markDTO.getMark() <= 6) {
             Mark mark = markDTO.mapToEntity(studentRepository.getOne(markDTO.getStudentId()), teacherRepository.getOne(markDTO.getTeacherId()), subjectRepository.getOne(markDTO.getSubjectId()));
             logger.info("Request to add mark: " + markDTO.getMark() + " with student ID: " + markDTO.getStudentId() + " Teacher ID: " + markDTO.getTeacherId() + " subject ID:" + markDTO.getSubjectId());
             logger.info("Addning with ID: " + markRepository.save(mark).getId());

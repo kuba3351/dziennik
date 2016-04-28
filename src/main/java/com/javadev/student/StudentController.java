@@ -21,7 +21,6 @@ public class StudentController {
     @RequestMapping(value="/student/add",method=RequestMethod.POST)
     public String add(@RequestBody @Valid StudentDTO studentDTO)
     {
-
         Student student = studentDTO.mapToEntity();
         logger.info("Request to add student: "+student.getName()+" "+student.getLastName());
         logger.info("Adding student. Given ID is: "+studentRepository.save(student).getId());

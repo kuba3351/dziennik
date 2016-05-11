@@ -1,0 +1,48 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Dziennik</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="Description" contens="Dziennik szkolny" />
+    <meta name="Keywords" content="Dziennik, uczniowie, oceny" />
+    <meta name="Author" content="Jakub Sierżęga" />
+    <link rel="Stylesheet" type="text/css" href="/style.css" />
+</head>
+<body>
+<div id="header">
+    <table>
+        <tr>
+            <td>
+                <img src="/dziennik.jpg"></img>
+            </td>
+            <td>
+                <h1>Dziennik szkolny</h1>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="menu">
+    <ul>
+        <li><a href="/">Strona główna</a></li>
+        <li><a href="view/students">Uczniowie</a></li>
+        <li><a href="/view/teachers">Nauczyciele</a></li>
+        <li><a href="bitcoin.html">oceny</a></li>
+        <li><a href="smartwatch.html">Przedmioty</a></li>
+    </ul>
+</div>
+<div th:if="!${error}" id="content">
+    <h1> Informacje o uczniu:</h1>
+    <p th:inline="text"> Imię: <b th:text="${student.name}"></b></p>
+    <p th:inline="text"> Nazwisko: <b th:text="${student.lastName}"></b></p>
+    <p th:inline="text"> Adres: <b th:text="${student.address}"></b></p>
+    <p th:inline="text"> Pesel: <b th:text="${student.pesel}"></b></p>
+    <p th:inline="text"> Data urodzenia: <b th:text="${student.birthday}"></b></p>
+    <a th:href="'student/delete?id='+${student.id}">Usuń ucznia</a>
+</div>
+<div th:if="${error}" id="content">
+    <p th:text="${error}"></p>
+</div>
+<div id="footer">
+    <script src="footer.js"></script>
+</div>
+</body>
+</html>

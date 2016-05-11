@@ -9,6 +9,8 @@ import com.javadev.teacher.TeacherRepository;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -36,26 +38,24 @@ public class MarkController {
     Logger logger = LogManager.getLogger(MarkController.class.getName());
 
     @RequestMapping("/mark/add")
-    public String add(@RequestBody @Valid MarkDTO markDTO)
+    public ResponseEntity add(@RequestBody @Valid MarkDTO markDTO)
     {
         if(studentRepository.exists(markDTO.getStudentId()) && teacherRepository.exists(markDTO.getTeacherId()) && subjectRepository.exists(markDTO.getSubjectId()) && markDTO.getMark() >= 1 && markDTO.getMark() <= 6) {
             Mark mark = markDTO.mapToEntity(studentRepository.getOne(markDTO.getStudentId()), teacherRepository.getOne(markDTO.getTeacherId()), subjectRepository.getOne(markDTO.getSubjectId()));
             logger.info("Request to add mark: " + markDTO.getMark() + " with student ID: " + markDTO.getStudentId() + " Teacher ID: " + markDTO.getTeacherId() + " subject ID:" + markDTO.getSubjectId());
-            logger.info("Addning with ID: " + markRepository.save(mark).getId());
-            return "added";
+            Mark save = markRepository.save(mark);
+            logger.info(String.format("Addning with ID:%s" , save.getId()));
+            return new ResponseEntity("Accepted", HttpStatus.ACCEPTED);
         }
-        else
-        {
-            logger.warn("Bad Request to add mark: " + markDTO.getMark() + " with student ID: " + markDTO.getStudentId() + " Teacher ID: " + markDTO.getTeacherId() + " subject ID:" + markDTO.getSubjectId());
-            return "Bad request";
-        }
+        logger.warn("Bad Request to add mark: " + markDTO.getMark() + " with student ID: " + markDTO.getStudentId() + " Teacher ID: " + markDTO.getTeacherId() + " subject ID:" + markDTO.getSubjectId());
+        return new ResponseEntity("Bad request", HttpStatus.BAD_REQUEST);
     }
     @RequestMapping(value = "/mark", method = RequestMethod.GET)
     public List<Mark> show()
     {
         return markRepository.findAll();
     }
-    @RequestMapping(value="/mark/delete/{id}",method= RequestMethod.DELETE)
+    @RequestMapping(value="/mark/{id}",method= RequestMethod.DELETE)
     public String delete(@PathVariable long id)
     {
         if(markRepository.exists(id)){

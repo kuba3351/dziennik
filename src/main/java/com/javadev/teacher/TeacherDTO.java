@@ -1,11 +1,43 @@
 package com.javadev.teacher;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.util.Date;
+
 /**
  * Created by kuba3 on 25.04.2016.
  */
 public class TeacherDTO {
     private String name;
     private String lastName;
+    private String pesel;
+    private String address;
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private Date birthday;
+
+    public String getPesel() {
+        return pesel;
+    }
+
+    public void setPesel(String pesel) {
+        this.pesel = pesel;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
 
     public String getName() {
         return name;
@@ -27,6 +59,9 @@ public class TeacherDTO {
         Teacher teacher = new Teacher();
         teacher.setName(this.getName());
         teacher.setLastName(this.getLastName());
+        teacher.setAddress(this.address);
+        teacher.setPesel(this.pesel);
+        teacher.setBirthday(this.birthday);
         return teacher;
     }
     public Teacher mapToEntity(long id)

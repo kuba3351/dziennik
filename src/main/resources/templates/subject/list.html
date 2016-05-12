@@ -22,11 +22,11 @@
 </div>
 <div id="menu">
     <ul>
-        <li><a href="../">Strona główna</a></li>
+        <li><a href="index">Strona główna</a></li>
         <li><a href="view/students">Uczniowie</a></li>
         <li><a href="/view/teachers">Nauczyciele</a></li>
-        <li><a href="bitcoin.html">oceny</a></li>
-        <li><a href="smartwatch.html">Przedmioty</a></li>
+        <li><a href="/view/subjects">Przedmioty</a></li>
+        <li><a href="/view/mark/form">oceny</a></li>
     </ul>
 </div>
 <div id="content">
@@ -34,6 +34,10 @@
     <ul>
         <li th:each="element : ${list}"><span th:text="${element.name}+' '"></span><a th:href="'/view/subject/delete?id='+${element.id}" th:text="usuń"></a></li>
     </ul>
+    <form action="#" th:action="@{/view/subject/addsubject}" th:object="${formData}" method="post">
+        <p>Nazwa: <input type="text" th:field="*{name}" /></p>
+        <input type="submit" name="dodaj" />
+    </form>
 </div>
 <div id="footer">
     <script src="footer.js"></script>

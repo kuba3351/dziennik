@@ -42,12 +42,12 @@ public class MarkController {
     {
         if(studentRepository.exists(markDTO.getStudentId()) && teacherRepository.exists(markDTO.getTeacherId()) && subjectRepository.exists(markDTO.getSubjectId()) && markDTO.getMark() >= 1 && markDTO.getMark() <= 6) {
             Mark mark = markDTO.mapToEntity(studentRepository.getOne(markDTO.getStudentId()), teacherRepository.getOne(markDTO.getTeacherId()), subjectRepository.getOne(markDTO.getSubjectId()));
-            logger.info("Request to add mark: " + markDTO.getMark() + " with student ID: " + markDTO.getStudentId() + " Teacher ID: " + markDTO.getTeacherId() + " subject ID:" + markDTO.getSubjectId());
+            logger.info("Request to add templates.mark: " + markDTO.getMark() + " with student ID: " + markDTO.getStudentId() + " Teacher ID: " + markDTO.getTeacherId() + " subject ID:" + markDTO.getSubjectId());
             Mark save = markRepository.save(mark);
             logger.info(String.format("Addning with ID:%s" , save.getId()));
             return new ResponseEntity("Accepted", HttpStatus.ACCEPTED);
         }
-        logger.warn("Bad Request to add mark: " + markDTO.getMark() + " with student ID: " + markDTO.getStudentId() + " Teacher ID: " + markDTO.getTeacherId() + " subject ID:" + markDTO.getSubjectId());
+        logger.warn("Bad Request to add templates.mark: " + markDTO.getMark() + " with student ID: " + markDTO.getStudentId() + " Teacher ID: " + markDTO.getTeacherId() + " subject ID:" + markDTO.getSubjectId());
         return new ResponseEntity("Bad request", HttpStatus.BAD_REQUEST);
     }
     @RequestMapping(value = "/mark", method = RequestMethod.GET)
@@ -55,20 +55,20 @@ public class MarkController {
     {
         return markRepository.findAll();
     }
-    @RequestMapping(value="/mark/{id}",method= RequestMethod.DELETE)
+    @RequestMapping(value= "/mark/{id}",method= RequestMethod.DELETE)
     public String delete(@PathVariable long id)
     {
         if(markRepository.exists(id)){
-            logger.info("Request to delete mark with ID: "+id);
+            logger.info("Request to delete templates.mark with ID: "+id);
             markRepository.delete(id);
             return "deleted";
         }
         else {
-            logger.warn("Request to delete mark with ID: "+id+" whitch is not found!");
-            return "mark not found";
+            logger.warn("Request to delete templates.mark with ID: "+id+" whitch is not found!");
+            return "templates.mark not found";
         }
     }
-    @RequestMapping(value="/mark/find",method = RequestMethod.POST)
+    @RequestMapping(value= "/mark/find",method = RequestMethod.POST)
     public List<Mark> find(@RequestBody MarkDTO markDTO)
     {
         List<Mark> list = markRepository.findAll();
@@ -101,7 +101,7 @@ public class MarkController {
         }
         return list;
     }
-    @RequestMapping(value="/mark/findsimple",method = RequestMethod.POST)
+    @RequestMapping(value= "/mark/findsimple",method = RequestMethod.POST)
     public List<Integer> findSimple(@RequestBody MarkDTO markDTO)
     {
         List<Mark> list = find(markDTO);

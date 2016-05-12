@@ -29,16 +29,15 @@
         <li><a href="/view/mark/form">oceny</a></li>
     </ul>
 </div>
-<div id="content">
-    <h1> Dodawanie ucznia </h1>
-    <form action="#" th:action="@{/view/student/addstudent}" th:object="${formData}" method="post">
-        <p>Imię: <input type="text" th:field="*{name}" /></p>
-        <p>Nazwisko: <input type="text" th:field="*{lastName}" /></p>
-        <p>Adres: <input type="text" th:field="*{address}" /></p>
-        <p>Pesel: <input type="text" th:field="*{pesel}" /></p>
-        <p>Data urodzenia (dd-mm-yyyy): <input type="text" th:field="*{birthday}" /></p>
-        <input type="submit" name="dodaj" />
-    </form>
+<div th:if="!${error}" id="content">
+    <h1> Informacje o uczniu:</h1>
+    <p th:inline="text"> Imię: <b th:text="${name}"></b></p>
+    <p th:inline="text"> Nazwisko: <b th:text="${lastName}"></b></p>
+    <p th:inline="text"> Przedmiot: <b th:text="${subject}"></b></p>
+    <p th:inline="text" > Oceny: <b th:each="element : ${list}" th:text="${element.mark}+' '"></b></p>
+</div>
+<div th:if="${error}" id="content">
+    <p th:text="${error}"></p>
 </div>
 <div id="footer">
     <script src="footer.js"></script>

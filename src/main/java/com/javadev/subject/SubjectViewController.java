@@ -23,7 +23,7 @@ public class SubjectViewController {
     private SubjectRepository subjectRepository;
 
     @RequestMapping(value = "/view/subjects", method = RequestMethod.GET)
-    public String show(Model model)
+    public String show(@ModelAttribute(value = "formData") SubjectDTO subjectDTO, Model model)
     {
         model.addAttribute("list", subjectRepository.findAll());
         return "/subject/list";
@@ -39,5 +39,13 @@ public class SubjectViewController {
         }
         model.addAttribute("message","Przedmiot nie znaleziony");
         return "subject/delete";
+    }
+    @RequestMapping(value = "/view/subject/addsubject", method = RequestMethod.POST)
+    public String add(@RequestParam String name)
+    {
+        SubjectDTO subjectDTO = new SubjectDTO();
+        subjectDTO.setName(name);
+        subjectRepository.save(subjectDTO.mapToEntity());
+        return "subject/add";
     }
 }

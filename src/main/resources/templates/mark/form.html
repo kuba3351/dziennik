@@ -30,14 +30,12 @@
     </ul>
 </div>
 <div id="content">
-    <h1> Dodawanie ucznia </h1>
-    <form action="#" th:action="@{/view/student/addstudent}" th:object="${formData}" method="post">
-        <p>Imię: <input type="text" th:field="*{name}" /></p>
-        <p>Nazwisko: <input type="text" th:field="*{lastName}" /></p>
-        <p>Adres: <input type="text" th:field="*{address}" /></p>
-        <p>Pesel: <input type="text" th:field="*{pesel}" /></p>
-        <p>Data urodzenia (dd-mm-yyyy): <input type="text" th:field="*{birthday}" /></p>
-        <input type="submit" name="dodaj" />
+    <h1> Oceny</h1>
+    <form action="#" th:action="@{/view/mark/show}" th:object="${formData}" method="post">
+        <p>Imię ucznia: <input type="text" th:field="*{name}" /></p>
+        <p>Nazwisko ucznia: <input type="text" th:field="*{lastName}" /></p>
+        <p>Przedmiot: <input type="text" th:field="*{subject}" /></p>
+        <input type="submit" name="szukaj" />
     </form>
 </div>
 <div id="footer">

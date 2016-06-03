@@ -1,6 +1,9 @@
 package com.javadev.mark;
 
+import com.javadev.student.Student;
 import com.javadev.student.StudentRepository;
+import com.javadev.subject.Subject;
+import com.javadev.subject.SubjectRepository;
 import com.javadev.teacher.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,26 +19,36 @@ import java.util.List;
 public class MarktViewController {
     @Autowired
     MarkRepository markRepository;
+
+    @Autowired
     StudentRepository studentRepository;
-    TeacherRepository teacherRepository;
+
+    @Autowired
+    SubjectRepository subjectRepository;
     @RequestMapping(value = "/view/mark/form", method = RequestMethod.GET)
-    public String form(@ModelAttribute(value = "formData") FormDTO formDTO)
+    public String form(@ModelAttribute(value = "formData") FormDTO formDTO, Model model)
     {
+        model.addAttribute("students", studentRepository.findAll());
+        model.addAttribute("subjects", subjectRepository.findAll());
         return "/mark/form";
     }
     @RequestMapping(value = "/view/mark/show", method = RequestMethod.POST)
-    public String show(@ModelAttribute(value = "formData") MarkDTO markDTO, @RequestParam String name, @RequestParam String lastName, @RequestParam String subject, Model model)
+    public String show(@RequestParam(value = "student") long student_id,@RequestParam(value = "subject") long subject_id, Model model)
     {
         List<Mark> list = markRepository.findAll();
-        for(Mark mark : list)
+        if(!studentRepository.exists(student_id) || !subjectRepository.exists(subject_id))
         {
-            if(!mark.getStudent().getName().equals(name) && mark.getStudent().getLastName().equals(lastName) && !mark.getSubject().getName().equals(subject))
-                list.remove(mark);
+            model.addAttribute("error", "wrong data");
         }
-        model.addAttribute("name", name);
-        model.addAttribute("lastName", lastName);
-        model.addAttribute("subject", subject);
-        model.addAttribute("list", list);
+        else
+        {
+            Student student = studentRepository.getOne(student_id);
+            Subject subject = subjectRepository.getOne(subject_id);
+            model.addAttribute("student", student);
+            model.addAttribute("subject", subject);
+            list.stream().filter(mark -> !mark.getStudent().equals(student) || !mark.getSubject().equals(subject)).forEach(list::remove);
+            model.addAttribute("list", list);
+        }
         return "/mark/show";
     }
 }

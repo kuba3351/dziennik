@@ -2,6 +2,7 @@ package com.javadev.teacher;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -69,5 +70,26 @@ public class TeacherDTO {
         Teacher teacher = this.mapToEntity();
         teacher.setId(id);
         return teacher;
+    }
+    public TeacherFormDTO mapToFormDTO()
+    {
+        TeacherFormDTO teacherFormDTO = new TeacherFormDTO();
+        teacherFormDTO.setName(name);
+        teacherFormDTO.setLastName(lastName);
+        teacherFormDTO.setAddress(address);
+        teacherFormDTO.setPesel(pesel);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        teacherFormDTO.setBirthday(simpleDateFormat.format(birthday));
+        return teacherFormDTO;
+    }
+    public static TeacherDTO getDTO(Teacher teacher)
+    {
+        TeacherDTO teacherDTO = new TeacherDTO();
+        teacherDTO.setName(teacher.getName());
+        teacherDTO.setLastName(teacher.getLastName());
+        teacherDTO.setAddress(teacher.getAddress());
+        teacherDTO.setPesel(teacher.getPesel());
+        teacherDTO.setBirthday(teacher.getBirthday());
+        return teacherDTO;
     }
 }

@@ -17,7 +17,7 @@ public class SubjectController {
     @Autowired
     SubjectRepository subjectRepository;
     static Logger logger = LogManager.getLogger(SubjectController.class.getName());
-    @RequestMapping(value="/subject/add",method= RequestMethod.POST)
+    @RequestMapping(value="/api/subject/add",method= RequestMethod.POST)
     public String add(@RequestBody @Valid SubjectDTO subjectDTO)
     {
         Subject subject = subjectDTO.mapToEntity();
@@ -25,7 +25,7 @@ public class SubjectController {
         logger.info("adding with given ID: "+subjectRepository.save(subject).getId());
         return "saved";
     }
-    @RequestMapping(value="/subject/delete/{id}",method=RequestMethod.DELETE)
+    @RequestMapping(value="/api/subject/{id}",method=RequestMethod.DELETE)
     public String delete(@PathVariable long id)
     {
         if(subjectRepository.exists(id)){
@@ -38,13 +38,13 @@ public class SubjectController {
             return "subject not found";
         }
     }
-    @RequestMapping(value = "/subject",method = RequestMethod.GET)
+    @RequestMapping(value = "/api/subject",method = RequestMethod.GET)
     public List<Subject> display()
     {
         logger.info("Request to show list of subjects");
         return subjectRepository.findAll();
     }
-    @RequestMapping(value = "/subjectsimple",method = RequestMethod.GET)
+    @RequestMapping(value = "/api/subjectsimple",method = RequestMethod.GET)
     public List<String> displaySimple()
     {
         ArrayList<String> subjects = new ArrayList<>();
@@ -55,7 +55,7 @@ public class SubjectController {
         }
         return subjects;
     }
-    @RequestMapping(value="/subject/update/{id}",method=RequestMethod.PUT)
+    @RequestMapping(value="/api/subject/{id}",method=RequestMethod.PUT)
     public String update(@PathVariable long id, @RequestBody SubjectDTO subjectDTO)
     {
         if(!subjectRepository.exists(id))
@@ -65,7 +65,7 @@ public class SubjectController {
             return "updated";
         }
     }
-    @RequestMapping(value="/subject/{id}",method= RequestMethod.GET)
+    @RequestMapping(value="/api/subject/{id}",method= RequestMethod.GET)
     @ResponseBody
     public Subject show(@PathVariable long id) throws Exception
     {

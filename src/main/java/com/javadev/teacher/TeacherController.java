@@ -18,7 +18,7 @@ public class TeacherController {
     TeacherRepository teacherRepository;
     static Logger logger = LogManager.getLogger(TeacherController.class.getName());
 
-    @RequestMapping(value="/teacher/add",method=RequestMethod.POST)
+    @RequestMapping(value="/api/teacher/add",method=RequestMethod.POST)
     public String add(@RequestBody @Valid TeacherDTO teacherDTO)
     {
         Teacher teacher = teacherDTO.mapToEntity();
@@ -26,7 +26,7 @@ public class TeacherController {
         logger.info("Adding new teacher with given ID: "+teacherRepository.save(teacher));
         return "saved";
     }
-    @RequestMapping(value="/teacher/delete/{id}",method=RequestMethod.DELETE)
+    @RequestMapping(value="/api/teacher/{id}",method=RequestMethod.DELETE)
     public String delete(@PathVariable long id)
     {
         if(teacherRepository.exists(id)){
@@ -39,13 +39,13 @@ public class TeacherController {
             return "teacher not found";
         }
     }
-    @RequestMapping(value = "/teacher",method = RequestMethod.GET)
+    @RequestMapping(value = "/api/teacher",method = RequestMethod.GET)
     public List<Teacher> display()
     {
         logger.info("request to show list of teachers");
         return teacherRepository.findAll();
     }
-    @RequestMapping(value = "/teachersimple",method = RequestMethod.GET)
+    @RequestMapping(value = "/api/teachersimple",method = RequestMethod.GET)
     public List<String> displaySimple()
     {
         ArrayList<String> teachers = new ArrayList<>();
@@ -61,7 +61,7 @@ public class TeacherController {
         }
         return teachers;
     }
-    @RequestMapping(value="/teacher/update/{id}",method=RequestMethod.PUT)
+    @RequestMapping(value="/api/teacher/{id}",method=RequestMethod.PUT)
     public String update(@PathVariable long id, @RequestBody TeacherDTO teacherDTO)
     {
         if(!teacherRepository.exists(id))

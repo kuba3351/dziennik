@@ -37,7 +37,7 @@ public class MarkController {
 
     Logger logger = LogManager.getLogger(MarkController.class.getName());
 
-    @RequestMapping("/mark/add")
+    @RequestMapping(value = "/api/mark", method = RequestMethod.POST)
     public ResponseEntity add(@RequestBody @Valid MarkDTO markDTO)
     {
         if(studentRepository.exists(markDTO.getStudentId()) && teacherRepository.exists(markDTO.getTeacherId()) && subjectRepository.exists(markDTO.getSubjectId()) && markDTO.getMark() >= 1 && markDTO.getMark() <= 6) {
@@ -50,12 +50,12 @@ public class MarkController {
         logger.warn("Bad Request to add templates.mark: " + markDTO.getMark() + " with student ID: " + markDTO.getStudentId() + " Teacher ID: " + markDTO.getTeacherId() + " subject ID:" + markDTO.getSubjectId());
         return new ResponseEntity("Bad request", HttpStatus.BAD_REQUEST);
     }
-    @RequestMapping(value = "/mark", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/mark", method = RequestMethod.GET)
     public List<Mark> show()
     {
         return markRepository.findAll();
     }
-    @RequestMapping(value= "/mark/{id}",method= RequestMethod.DELETE)
+    @RequestMapping(value= "/api/mark/{id}",method= RequestMethod.DELETE)
     public String delete(@PathVariable long id)
     {
         if(markRepository.exists(id)){
@@ -68,7 +68,7 @@ public class MarkController {
             return "templates.mark not found";
         }
     }
-    @RequestMapping(value= "/mark/find",method = RequestMethod.POST)
+    @RequestMapping(value= "/api/mark/find",method = RequestMethod.POST)
     public List<Mark> find(@RequestBody MarkDTO markDTO)
     {
         List<Mark> list = markRepository.findAll();
@@ -101,7 +101,7 @@ public class MarkController {
         }
         return list;
     }
-    @RequestMapping(value= "/mark/findsimple",method = RequestMethod.POST)
+    @RequestMapping(value= "/api/mark/findsimple",method = RequestMethod.POST)
     public List<Integer> findSimple(@RequestBody MarkDTO markDTO)
     {
         List<Mark> list = find(markDTO);

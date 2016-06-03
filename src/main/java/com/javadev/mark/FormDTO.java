@@ -4,24 +4,15 @@ package com.javadev.mark;
  * Created by kuba3 on 12.05.2016.
  */
 public class FormDTO {
-    private String name;
-    private String lastName;
+    private String student;
     private String subject;
 
-    public String getName() {
-        return name;
+    public String getStudent() {
+        return student;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setStudent(String student) {
+        this.student = student;
     }
 
     public String getSubject() {

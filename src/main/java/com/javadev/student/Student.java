@@ -20,6 +20,16 @@ public class Student {
     private String lastName;
     private String pesel;
     private String address;
+    private String sex;
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
     @JsonFormat(pattern = "dd-MM-yyyy")
     private Date birthday;
 

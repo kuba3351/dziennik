@@ -56,23 +56,38 @@ public class TeacherViewController {
         return "teacher/addForm";
     }
     @RequestMapping(value="/view/teacher/addteacher", method = RequestMethod.POST)
-    public String addTeacher(@RequestParam(value = "name") String name, @RequestParam(value = "lastName") String lastName, @RequestParam(value = "address") String address, @RequestParam(value = "pesel") String pesel, @RequestParam(value = "birthday") String birthday, Model model)
+    public String addTeacher(TeacherFormDTO teacherFormDTO, Model model)
     {
-        TeacherDTO teacherDTO = new TeacherDTO();
-        teacherDTO.setName(name);
-        teacherDTO.setLastName(lastName);
-        teacherDTO.setAddress(address);
-        teacherDTO.setPesel(pesel);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        try {
-            teacherDTO.setBirthday(simpleDateFormat.parse(birthday));
-        }
-        catch(Exception e)
+        teacherRepository.save(teacherFormDTO.mapToDTO().mapToEntity());
+        return "teacher/add";
+    }
+    @RequestMapping(value="/view/teacher/edit", method = RequestMethod.GET)
+    public String update(@RequestParam long id, Model model)
+    {
+        if(!teacherRepository.exists(id))
         {
-            model.addAttribute("message","Źle wpisana data");
-            return "teacher/add";
+            model.addAttribute("error", "nauczyciel nie znaleziony");
         }
-        teacherRepository.save(teacherDTO.mapToEntity());
+        else
+        {
+            model.addAttribute("formData" ,TeacherDTO.getDTO(teacherRepository.getOne(id)).mapToFormDTO());
+            model.addAttribute("id", id);
+        }
+        return "teacher/updateForm";
+    }
+    @RequestMapping(value="/view/teacher/updateteacher", method = RequestMethod.POST)
+    public String update(TeacherFormDTO teacherFormDTO, @RequestParam long id, Model model)
+    {
+        if(!teacherRepository.exists(id))
+        {
+            model.addAttribute("error", "teacher not found");
+        }
+        else
+        {
+            Teacher teacher = teacherFormDTO.mapToDTO().mapToEntity();
+            teacher.setId(id);
+            teacherRepository.save(teacher);
+        }
         return "teacher/add";
     }
 }

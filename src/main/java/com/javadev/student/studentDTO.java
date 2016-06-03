@@ -15,6 +15,7 @@ public class StudentDTO {
     private String address;
     @JsonFormat(pattern = "dd-MM-yyyy")
     private Date birthday;
+    private String sex;
 
     public String getName() {
         return name;
@@ -39,6 +40,7 @@ public class StudentDTO {
         student.setPesel(this.pesel);
         student.setAddress(this.getAddress());
         student.setBirthday(this.getBirthday());
+        student.setSex(sex);
         return student;
     }
     public Student mapToEntity(long id)
@@ -46,6 +48,39 @@ public class StudentDTO {
         Student student = this.mapToEntity();
         student.setId(id);
         return student;
+    }
+
+    public StudentFormDTO mapToFormDTO()
+    {
+        StudentFormDTO studentFormDTO = new StudentFormDTO();
+        studentFormDTO.setName(name);
+        studentFormDTO.setLastName(lastName);
+        studentFormDTO.setAddress(address);
+        studentFormDTO.setPesel(pesel);
+        studentFormDTO.setSex(sex);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        studentFormDTO.setBirthday(simpleDateFormat.format(birthday));
+        return studentFormDTO;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public static StudentDTO getDTO(Student student)
+    {
+        StudentDTO studentDTO = new StudentDTO();
+        studentDTO.setName(student.getName());
+        studentDTO.setLastName(student.getLastName());
+        studentDTO.setAddress(student.getAddress());
+        studentDTO.setPesel(student.getPesel());
+        studentDTO.setSex(student.getSex());
+        studentDTO.setBirthday(student.getBirthday());
+        return studentDTO;
     }
 
     public String getPesel() {

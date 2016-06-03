@@ -60,23 +60,38 @@ public class StudentViewController {
         return "student/addForm";
     }
     @RequestMapping(value="/view/student/addstudent", method = RequestMethod.POST)
-    public String addStudent(@RequestParam(value = "name") String name, @RequestParam(value = "lastName") String lastName, @RequestParam(value = "address") String address, @RequestParam(value = "pesel") String pesel, @RequestParam(value = "birthday") String birthday, Model model)
+    public String addStudent(StudentFormDTO studentFormDTO, Model model)
     {
-        StudentDTO studentDTO = new StudentDTO();
-        studentDTO.setName(name);
-        studentDTO.setLastName(lastName);
-        studentDTO.setAddress(address);
-        studentDTO.setPesel(pesel);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        try {
-            studentDTO.setBirthday(simpleDateFormat.parse(birthday));
-        }
-        catch(Exception e)
+        studentRepository.save(studentFormDTO.mapToDTO().mapToEntity());
+        return "student/add";
+    }
+    @RequestMapping(value="/view/student/update", method = RequestMethod.GET)
+    public String update(@RequestParam long id, Model model)
+    {
+        if(!studentRepository.exists(id))
         {
-            model.addAttribute("message","Źle wpisana data");
-            return "student/add";
+            model.addAttribute("error", "student nie znaleziony");
         }
-        studentRepository.save(studentDTO.mapToEntity());
+        else
+        {
+            model.addAttribute("formData" ,StudentDTO.getDTO(studentRepository.getOne(id)).mapToFormDTO());
+            model.addAttribute("id", id);
+        }
+        return "student/updateForm";
+    }
+    @RequestMapping(value="/view/student/updatestudent", method = RequestMethod.POST)
+    public String update(StudentFormDTO studentFormDTO, @RequestParam long id, Model model)
+    {
+        if(!studentRepository.exists(id))
+        {
+            model.addAttribute("error", "student nie znaleziony");
+        }
+        else
+        {
+            Student student = studentFormDTO.mapToDTO().mapToEntity();
+            student.setId(id);
+            studentRepository.save(student);
+        }
         return "student/add";
     }
 }

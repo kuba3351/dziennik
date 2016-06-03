@@ -18,7 +18,7 @@ public class StudentController {
     @Autowired
     StudentRepository studentRepository;
     static Logger logger = LogManager.getLogger(StudentController.class.getName());
-    @RequestMapping(value="/student/add",method=RequestMethod.POST)
+    @RequestMapping(value="/api/student",method=RequestMethod.POST)
     public String add(@RequestBody @Valid StudentDTO studentDTO)
     {
         Student student = studentDTO.mapToEntity();
@@ -26,7 +26,7 @@ public class StudentController {
         logger.info("Adding student. Given ID is: "+studentRepository.save(student).getId());
         return "saved";
     }
-    @RequestMapping(value="/student/delete/{id}",method= RequestMethod.DELETE)
+    @RequestMapping(value="/api/student/{id}",method= RequestMethod.DELETE)
     public String delete(@PathVariable long id)
     {
         if(studentRepository.exists(id)){
@@ -39,13 +39,13 @@ public class StudentController {
             return "student not found";
         }
     }
-    @RequestMapping(value = "/student",method = RequestMethod.GET)
+    @RequestMapping(value = "/api/student",method = RequestMethod.GET)
     public List<Student> display()
     {
         logger.info("Request to show list of students");
         return studentRepository.findAll();
     }
-    @RequestMapping(value = "/studentsimple",method = RequestMethod.GET)
+    @RequestMapping(value = "/api/studentsimple",method = RequestMethod.GET)
     public List<String> displaySimple()
     {
         ArrayList<String> students = new ArrayList<>();
@@ -61,7 +61,7 @@ public class StudentController {
         }
         return students;
     }
-    @RequestMapping(value="/student/update/{id}",method=RequestMethod.PUT)
+    @RequestMapping(value="/api/student/{id}",method=RequestMethod.PUT)
     public String update(@PathVariable long id, @RequestBody StudentDTO studentDTO)
     {
         if(!studentRepository.exists(id))
@@ -71,7 +71,7 @@ public class StudentController {
             return "updated";
         }
     }
-    @RequestMapping(value="/student/{id}",method= RequestMethod.GET)
+    @RequestMapping(value="/api/student/{id}",method= RequestMethod.GET)
     @ResponseBody
     public Student show(@PathVariable long id) throws Exception
     {

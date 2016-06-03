@@ -22,8 +22,8 @@
 </div>
 <div id="menu">
     <ul>
-        <li><a href="index">Strona główna</a></li>
-        <li><a href="view/students">Uczniowie</a></li>
+        <li><a href="/">Strona główna</a></li>
+        <li><a href="/view/students">Uczniowie</a></li>
         <li><a href="/view/teachers">Nauczyciele</a></li>
         <li><a href="/view/subjects">Przedmioty</a></li>
         <li><a href="/view/mark/form">oceny</a></li>
@@ -36,6 +36,9 @@
         <p>Nazwisko: <input type="text" th:field="*{lastName}" /></p>
         <p>Adres: <input type="text" th:field="*{address}" /></p>
         <p>Pesel: <input type="text" th:field="*{pesel}" /></p>
+        <p>Płeć: <input type="radio" th:field="*{sex}" th:value="Mężczyzna" /> Mężczyzna
+            <input type="radio" th:field="*{sex}" th:value="Kobieta" /> Kobieta
+        </p>
         <p>Data urodzenia (dd-mm-yyyy): <input type="text" th:field="*{birthday}" /></p>
         <input type="submit" name="dodaj" />
     </form>

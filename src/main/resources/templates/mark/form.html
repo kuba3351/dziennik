@@ -22,8 +22,8 @@
 </div>
 <div id="menu">
     <ul>
-        <li><a href="index">Strona główna</a></li>
-        <li><a href="view/students">Uczniowie</a></li>
+        <li><a href="/">Strona główna</a></li>
+        <li><a href="/view/students">Uczniowie</a></li>
         <li><a href="/view/teachers">Nauczyciele</a></li>
         <li><a href="/view/subjects">Przedmioty</a></li>
         <li><a href="/view/mark/form">oceny</a></li>
@@ -32,9 +32,16 @@
 <div id="content">
     <h1> Oceny</h1>
     <form action="#" th:action="@{/view/mark/show}" th:object="${formData}" method="post">
-        <p>Imię ucznia: <input type="text" th:field="*{name}" /></p>
-        <p>Nazwisko ucznia: <input type="text" th:field="*{lastName}" /></p>
-        <p>Przedmiot: <input type="text" th:field="*{subject}" /></p>
+        <p>Uczeń:
+        <select th:field="*{student}">
+            <option th:each="element : ${students}" th:value="${element.id}" th:text="${element.name} +' ' + ${element.lastName}"></option>
+            </select>
+        </p>
+        <p>Przedmiot:
+            <select th:field="*{subject}">
+                <option th:each="element : ${subjects}" th:value="${element.id}" th:text="${element.name}"></option>
+            </select>
+        </p>
         <input type="submit" name="szukaj" />
     </form>
 </div>

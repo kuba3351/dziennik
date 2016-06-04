@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -41,8 +42,7 @@ public class StudentFormDTO {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    public StudentDTO mapToDTO()
-    {
+    public StudentDTO mapToDTO() throws ParseException {
         StudentDTO studentDTO = new StudentDTO();
         studentDTO.setName(name);
         studentDTO.setLastName(lastName);
@@ -50,13 +50,7 @@ public class StudentFormDTO {
         studentDTO.setPesel(pesel);
         studentDTO.setSex(sex);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        try {
-            studentDTO.setBirthday(simpleDateFormat.parse(birthday));
-        }
-        catch (Exception e)
-        {
-            LogManager.getLogger(StudentFormDTO.class.getName()).error(String.format("Date parsing error %s",birthday));
-        }
+        studentDTO.setBirthday(simpleDateFormat.parse(birthday));
         return studentDTO;
     }
 

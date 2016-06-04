@@ -5,6 +5,7 @@ import com.javadev.student.StudentFormDTO;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -57,21 +58,14 @@ public class TeacherFormDTO {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    public TeacherDTO mapToDTO()
-    {
+    public TeacherDTO mapToDTO() throws ParseException {
         TeacherDTO teacherDTO = new TeacherDTO();
         teacherDTO.setName(name);
         teacherDTO.setLastName(lastName);
         teacherDTO.setAddress(address);
         teacherDTO.setPesel(pesel);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        try {
-            teacherDTO.setBirthday(simpleDateFormat.parse(birthday));
-        }
-        catch(Exception e)
-        {
-            LogManager.getLogger(TeacherFormDTO.class.getName()).error(String.format("Date parsing error %s",birthday));
-        }
+        teacherDTO.setBirthday(simpleDateFormat.parse(birthday));
         return teacherDTO;
     }
 }

@@ -11,7 +11,6 @@ import com.javadev.subject.Subject;
 public class MarkDTO {
     private int mark;
     private long subjectId;
-    private long teacherId;
     private long studentId;
 
     public int getMark() {
@@ -30,14 +29,6 @@ public class MarkDTO {
         this.subjectId = subjectId;
     }
 
-    public long getTeacherId() {
-        return this.teacherId;
-    }
-
-    public void setTeacherId(long teacherId) {
-        this.teacherId = teacherId;
-    }
-
     public long getStudentId() {
         return this.studentId;
     }
@@ -46,12 +37,11 @@ public class MarkDTO {
         this.studentId = studentId;
     }
 
-    public Mark mapToEntity(Student student, Teacher teacher, Subject subject)
+    public Mark mapToEntity(Student student, Subject subject)
     {
         Mark mark = new Mark();
         mark.setMark(this.mark);
         mark.setStudent(student);
-        mark.setTeacher(teacher);
         mark.setSubject(subject);
         return mark;
     }

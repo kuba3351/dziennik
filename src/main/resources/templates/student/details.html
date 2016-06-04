@@ -29,7 +29,7 @@
         <li><a href="/view/mark/form">oceny</a></li>
     </ul>
 </div>
-<div th:if="!${error}" id="content">
+<div id="content">
     <h1> Informacje o uczniu:</h1>
     <p th:inline="text"> Imię: <b th:text="${student.name}"></b></p>
     <p th:inline="text"> Nazwisko: <b th:text="${student.lastName}"></b></p>
@@ -39,9 +39,6 @@
     <p th:inline="text"> Data urodzenia: <b th:text="${student.birthday}"></b></p>
     <a th:href="'student/delete?id='+${student.id}">Usuń ucznia</a>
     <a th:href="'student/update?id='+${student.id}">Edytuj ucznia</a>
-</div>
-<div th:if="${error}" id="content">
-    <p th:text="${error}"></p>
 </div>
 <div id="footer">
     <script src="footer.js"></script>

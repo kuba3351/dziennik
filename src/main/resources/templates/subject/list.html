@@ -32,7 +32,10 @@
 <div id="content">
     <h1> Lista przedmiotów</h1>
     <ul>
-        <li th:each="element : ${list}"><span th:text="${element.name}+' '"></span><a th:href="'/view/subject/delete?id='+${element.id}" th:text="usuń"></a></li>
+        <li th:each="element : ${list}"><span th:text="${element.name}+' '"></span><a th:href="'/view/subject/delete?id='+${element.id}" th:text="usuń"></a>
+        <a th:href="'/view/subject/addteacher?id=' + ${element.id}" >Dodaj nauczyciela</a>
+            <a th:href="'/view/subject/removeteacher?id=' + ${element.id}" >Usuń nauczyciela</a>
+        </li>
     </ul>
     <form action="#" th:action="@{/view/subject/addsubject}" th:object="${formData}" method="post">
         <p>Nazwa: <input type="text" th:field="*{name}" /></p>

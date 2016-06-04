@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +41,9 @@ public class StudentViewController {
             model.addAttribute("student", studentRepository.getOne(id));
             return "student/details";
         }
-        model.addAttribute("error", "Student nie znaleziony");
-        return "student/details";
+        model.addAttribute("message", "Student nie znaleziony");
+        model.addAttribute("link", "/view/students");
+        return "message";
     }
     @RequestMapping(value="/view/student/delete", method = RequestMethod.GET)
     public String delete(@RequestParam long id, Model model)
@@ -49,49 +51,70 @@ public class StudentViewController {
         if(studentRepository.exists(id))
         {
             studentRepository.delete(id);
-            return "student/delete";
+            model.addAttribute("message", "Student usunięty");
+            model.addAttribute("link", "/view/students");
+            return "message";
         }
-        model.addAttribute("error", "Student nie znaleziony");
-        return "student/delete";
+        model.addAttribute("message", "Student nie znaleziony");
+        model.addAttribute("link", "/view/students");
+        return "message";
     }
     @RequestMapping(value = "/view/student/add", method = RequestMethod.GET)
-    public String addForm(@ModelAttribute(value = "formData") StudentDTO studentDTO)
+    public String addForm(@ModelAttribute(value = "formData") StudentDTO studentDTO, Model model)
     {
+        model.addAttribute("actionaddress","/view/student/addstudent");
         return "student/addForm";
     }
     @RequestMapping(value="/view/student/addstudent", method = RequestMethod.POST)
     public String addStudent(StudentFormDTO studentFormDTO, Model model)
     {
-        studentRepository.save(studentFormDTO.mapToDTO().mapToEntity());
-        return "student/add";
+        try {
+            studentRepository.save(studentFormDTO.mapToDTO().mapToEntity());
+        }
+        catch(ParseException e)
+        {
+            model.addAttribute("message", "źle wpisana data");
+            model.addAttribute("link", "/view/students");
+            return "message";
+        }
+        model.addAttribute("message", "Student dodany");
+        model.addAttribute("link", "/view/students");
+        return "message";
     }
     @RequestMapping(value="/view/student/update", method = RequestMethod.GET)
     public String update(@RequestParam long id, Model model)
     {
         if(!studentRepository.exists(id))
         {
-            model.addAttribute("error", "student nie znaleziony");
+            model.addAttribute("message", "student nie znaleziony");
+            model.addAttribute("link", "/view/students");
+            return "message";
         }
-        else
-        {
-            model.addAttribute("formData" ,StudentDTO.getDTO(studentRepository.getOne(id)).mapToFormDTO());
-            model.addAttribute("id", id);
-        }
-        return "student/updateForm";
+        model.addAttribute("formData" ,StudentDTO.getDTO(studentRepository.getOne(id)).mapToFormDTO());
+        model.addAttribute("actionaddress", "/view/student/updatestudent?id=" + id);
+        return "student/addForm";
     }
     @RequestMapping(value="/view/student/updatestudent", method = RequestMethod.POST)
     public String update(StudentFormDTO studentFormDTO, @RequestParam long id, Model model)
     {
         if(!studentRepository.exists(id))
         {
-            model.addAttribute("error", "student nie znaleziony");
+            model.addAttribute("message", "student nie znaleziony");
+            model.addAttribute("link", "/view/students");
+            return "message";
         }
-        else
-        {
-            Student student = studentFormDTO.mapToDTO().mapToEntity();
-            student.setId(id);
-            studentRepository.save(student);
+        Student student = null;
+        try {
+            student = studentFormDTO.mapToDTO().mapToEntity();
+        } catch (ParseException e) {
+            model.addAttribute("message", "źle wpisana data");
+            model.addAttribute("link", "/view/students");
+            return "message";
         }
-        return "student/add";
+        student.setId(id);
+        studentRepository.save(student);
+        model.addAttribute("message", "Student zmieniony");
+        model.addAttribute("link", "/view/students");
+        return "message";
     }
 }

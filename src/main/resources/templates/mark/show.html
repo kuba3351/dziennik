@@ -35,6 +35,19 @@
     <p th:inline="text"> Nazwisko: <b th:text="${student.lastName}"></b></p>
     <p th:inline="text"> Przedmiot: <b th:text="${subject.name}"></b></p>
     <p th:inline="text" > Oceny: <b th:each="element : ${list}" th:text="${element.mark}+' '"></b></p>
+    <form action="#" th:action="@{/view/mark/add}" th:object="${formData}" method="post">
+        <p>Dodaj oceny:</p>
+        <input type="hidden" th:field="*{student}" th:value="${student.id}"/>
+        <input type="hidden" th:field="*{subject}" th:value="${subject.id}"/>
+        <select th:field="*{mark}">
+            <option th:value="1" th:text="1"></option>
+            <option th:value="2" th:text="2"></option>
+            <option th:value="3" th:text="3"></option>
+            <option th:value="4" th:text="4"></option>
+            <option th:value="5" th:text="5"></option>
+        </select>
+        <input type="submit" name="dodaj" />
+    </form>
 </div>
 <div th:if="${error}" id="content">
     <p th:text="${error}"></p>

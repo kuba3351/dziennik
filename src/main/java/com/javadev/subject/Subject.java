@@ -1,9 +1,9 @@
 package com.javadev.subject;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.javadev.teacher.Teacher;
+
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by kuba3 on 25.04.2016.
@@ -14,6 +14,16 @@ public class Subject {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     private String name;
+    @ManyToMany
+    List<Teacher> teachers;
+
+    public List<Teacher> getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(List<Teacher> teachers) {
+        this.teachers = teachers;
+    }
 
     public long getId() {
         return id;

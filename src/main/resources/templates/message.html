@@ -30,8 +30,9 @@
     </ul>
 </div>
 <div id="content">
-    <p th:text="${message}"></p>
-    <a href="/view/subjects" th:text="powrót"></a>
+    <h1 th:text="${message}"></h1>
+    <a th:href="${link}">Powrót</a>
+
 </div>
 <div id="footer">
     <script src="footer.js"></script>

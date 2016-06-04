@@ -29,13 +29,13 @@
         <li><a href="/view/mark/form">oceny</a></li>
     </ul>
 </div>
-<div th:if="${error}" id="content">
-    <p th:text="${error}"></p>
+<div id="content">
+    <h1> Edytuj przedmiot: </h1>
+    <form action="#" th:action="@{/view/subject/addsubject}" th:object="${formData}" method="post">
+        <p>Nazwa: <input type="text" th:field="*{name}" /></p>
+        <input type="submit" name="dodaj" />
+    </form>
 </div>
-<div th:if="!${error}" id="content">
-    <p>Nauczyciel usunięty.</p>
-</div>
-<a th:href="@{../teachers}">Powrót do listy</a>
 <div id="footer">
     <script src="footer.js"></script>
 </div>

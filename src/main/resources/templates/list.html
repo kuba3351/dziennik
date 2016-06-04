@@ -30,11 +30,13 @@
     </ul>
 </div>
 <div id="content">
-    <h1> Dodawanie nauczyciela </h1>
-
-    <p th:text="${message}"></p>
-    <a th:href="@{/teachers}">Powrót do listy</a>
-
+    <h1 th:text="${message}"></h1>
+    <form action="#" th:action="${actionaddress}" th:object="${formData}" method="post">
+        <select th:field="*{option}">
+            <option th:each="element : ${elements}" th:value="${element.id}" th:text="${element.name} +' ' + ${element.lastName}"></option>
+            </select>
+        <input type="submit" name="szukaj" />
+    </form>
 </div>
 <div id="footer">
     <script src="footer.js"></script>

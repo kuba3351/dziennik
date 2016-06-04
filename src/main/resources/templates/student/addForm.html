@@ -31,7 +31,7 @@
 </div>
 <div id="content">
     <h1> Dodawanie ucznia </h1>
-    <form action="#" th:action="@{/view/student/addstudent}" th:object="${formData}" method="post">
+    <form action="#" th:action="${actionaddress}" th:object="${formData}" method="post">
         <p>Imię: <input type="text" th:field="*{name}" /></p>
         <p>Nazwisko: <input type="text" th:field="*{lastName}" /></p>
         <p>Adres: <input type="text" th:field="*{address}" /></p>

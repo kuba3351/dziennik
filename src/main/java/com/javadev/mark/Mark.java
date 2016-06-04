@@ -19,8 +19,6 @@ public class Mark {
     @ManyToOne
     private Subject subject;
     @ManyToOne
-    private Teacher teacher;
-    @ManyToOne
     private Student student;
 
     public long getId() {
@@ -45,14 +43,6 @@ public class Mark {
 
     public void setSubject(Subject subject) {
         this.subject = subject;
-    }
-
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
     }
 
     public Student getStudent() {

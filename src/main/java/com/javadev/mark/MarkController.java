@@ -40,14 +40,14 @@ public class MarkController {
     @RequestMapping(value = "/api/mark", method = RequestMethod.POST)
     public ResponseEntity add(@RequestBody @Valid MarkDTO markDTO)
     {
-        if(studentRepository.exists(markDTO.getStudentId()) && teacherRepository.exists(markDTO.getTeacherId()) && subjectRepository.exists(markDTO.getSubjectId()) && markDTO.getMark() >= 1 && markDTO.getMark() <= 6) {
-            Mark mark = markDTO.mapToEntity(studentRepository.getOne(markDTO.getStudentId()), teacherRepository.getOne(markDTO.getTeacherId()), subjectRepository.getOne(markDTO.getSubjectId()));
-            logger.info("Request to add templates.mark: " + markDTO.getMark() + " with student ID: " + markDTO.getStudentId() + " Teacher ID: " + markDTO.getTeacherId() + " subject ID:" + markDTO.getSubjectId());
+        if(studentRepository.exists(markDTO.getStudentId()) && subjectRepository.exists(markDTO.getSubjectId()) && markDTO.getMark() >= 1 && markDTO.getMark() <= 6) {
+            Mark mark = markDTO.mapToEntity(studentRepository.getOne(markDTO.getStudentId()), subjectRepository.getOne(markDTO.getSubjectId()));
+            logger.info("Request to add templates.mark: " + markDTO.getMark() + " with student ID: " + markDTO.getStudentId() + " subject ID:" + markDTO.getSubjectId());
             Mark save = markRepository.save(mark);
             logger.info(String.format("Addning with ID:%s" , save.getId()));
             return new ResponseEntity("Accepted", HttpStatus.ACCEPTED);
         }
-        logger.warn("Bad Request to add templates.mark: " + markDTO.getMark() + " with student ID: " + markDTO.getStudentId() + " Teacher ID: " + markDTO.getTeacherId() + " subject ID:" + markDTO.getSubjectId());
+        logger.warn("Bad Request to add templates.mark: " + markDTO.getMark() + " with student ID: " + markDTO.getStudentId() + " subject ID:" + markDTO.getSubjectId());
         return new ResponseEntity("Bad request", HttpStatus.BAD_REQUEST);
     }
     @RequestMapping(value = "/api/mark", method = RequestMethod.GET)
@@ -72,32 +72,15 @@ public class MarkController {
     public List<Mark> find(@RequestBody MarkDTO markDTO)
     {
         List<Mark> list = markRepository.findAll();
-        if(markDTO.getTeacherId() != 0)
-        {
-            Teacher teacher = teacherRepository.getOne(markDTO.getTeacherId());
-            for(int i = 0;i<list.size();i++)
-            {
-                if(!teacher.equals(list.get(i).getTeacher()))
-                    list.remove(i--);
-            }
-        }
         if(markDTO.getStudentId() != 0)
         {
             Student student = studentRepository.getOne(markDTO.getStudentId());
-            for(int i = 0;i<list.size();i++)
-            {
-                if(!student.equals(list.get(i).getStudent()))
-                    list.remove(i--);
-            }
+            list.retainAll(markRepository.findByStudent(student));
         }
         if(markDTO.getSubjectId() != 0)
         {
             Subject subject = subjectRepository.getOne(markDTO.getSubjectId());
-            for(int i = 0;i<list.size();i++)
-            {
-                if(!subject.equals(list.get(i).getSubject()))
-                    list.remove(i--);
-            }
+            list.retainAll(markRepository.findBySubject(subject));
         }
         return list;
     }

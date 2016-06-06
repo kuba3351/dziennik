@@ -16,6 +16,15 @@ public class StudentDTO {
     @JsonFormat(pattern = "dd-MM-yyyy")
     private Date birthday;
     private String sex;
+    private long class_id;
+
+    public long getClass_id() {
+        return class_id;
+    }
+
+    public void setClass_id(long class_id) {
+        this.class_id = class_id;
+    }
 
     public String getName() {
         return name;
@@ -32,7 +41,7 @@ public class StudentDTO {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    public Student mapToEntity()
+    public Student mapToEntity(com.javadev.Class.Class clazz)
     {
         Student student = new Student();
         student.setName(this.getName());
@@ -41,11 +50,12 @@ public class StudentDTO {
         student.setAddress(this.getAddress());
         student.setBirthday(this.getBirthday());
         student.setSex(sex);
+        student.setClazz(clazz);
         return student;
     }
-    public Student mapToEntity(long id)
+    public Student mapToEntity(long id, com.javadev.Class.Class clazz)
     {
-        Student student = this.mapToEntity();
+        Student student = this.mapToEntity(clazz);
         student.setId(id);
         return student;
     }
@@ -60,6 +70,7 @@ public class StudentDTO {
         studentFormDTO.setSex(sex);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         studentFormDTO.setBirthday(simpleDateFormat.format(birthday));
+        studentFormDTO.setClass_id(class_id);
         return studentFormDTO;
     }
 
@@ -80,6 +91,7 @@ public class StudentDTO {
         studentDTO.setPesel(student.getPesel());
         studentDTO.setSex(student.getSex());
         studentDTO.setBirthday(student.getBirthday());
+        studentDTO.setClass_id(student.getClazz().getId());
         return studentDTO;
     }
 

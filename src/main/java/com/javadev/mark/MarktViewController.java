@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -36,7 +37,6 @@ public class MarktViewController {
     @RequestMapping(value = "/view/mark/show", method = RequestMethod.POST)
     public String show(@ModelAttribute(value = "formData") FormDTO formDTO, @RequestParam(value = "student") long student_id,@RequestParam(value = "subject") long subject_id, Model model)
     {
-        List<Mark> list = markRepository.findAll();
         if(!studentRepository.exists(student_id) || !subjectRepository.exists(subject_id))
         {
             model.addAttribute("error", "wrong data");
@@ -47,9 +47,23 @@ public class MarktViewController {
             Subject subject = subjectRepository.getOne(subject_id);
             model.addAttribute("student", student);
             model.addAttribute("subject", subject);
-            list.retainAll(markRepository.findByStudent(student));
+            List<Mark> list = markRepository.findByStudent(student);
             list.retainAll(markRepository.findBySubject(subject));
-            model.addAttribute("list", list);
+            List<Mark> kartkowka = new ArrayList<>();
+            List<Mark> sprawdzian = new ArrayList<>();
+            List<Mark> koncowa = new ArrayList<>();
+            for(Mark mark : list)
+            {
+                if(mark.getTyp().equals("kartkowka"))
+                    kartkowka.add(mark);
+                if(mark.getTyp().equals("sprawdzian"))
+                    sprawdzian.add(mark);
+                if(mark.getTyp().equals("koncowa"))
+                    koncowa.add(mark);
+            }
+            model.addAttribute("kartkowka", kartkowka);
+            model.addAttribute("sprawdzian", sprawdzian);
+            model.addAttribute("koncowa", koncowa);
         }
         return "/mark/show";
     }
@@ -70,8 +84,29 @@ public class MarktViewController {
         }
         Mark mark = new Mark();
         mark.setMark(formDTO.getMark());
-        mark.setStudent(studentRepository.findOne(formDTO.getStudent()));
-        mark.setSubject(subjectRepository.findOne(formDTO.getSubject()));
+        mark.setTyp(formDTO.getTyp());
+        Student student = studentRepository.findOne(formDTO.getStudent());
+        mark.setStudent(student);
+        Subject subject = subjectRepository.findOne(formDTO.getSubject());
+        mark.setSubject(subject);
+        List<Mark> lista = markRepository.findByStudent(student);
+        lista.retainAll(markRepository.findBySubject(subject));
+        if(formDTO.getTyp().equals("koncowa")) {
+            if (lista.isEmpty()) {
+                model.addAttribute("message", "Zdaje się, że najpierw dajemy oceny cząstkowe");
+                model.addAttribute("link", "/view/mark/form");
+                return "message";
+            }
+        }
+        for(Mark mark1 : lista) {
+            if (mark1.getTyp().equals("koncowa")) {
+                model.addAttribute("message", "Zdaje się, że nie wystawiamy już ocen po wystawieniu końcowej");
+                model.addAttribute("link", "/view/mark/form");
+                return "message";
+            }
+        }
+
+
         markRepository.save(mark);
         model.addAttribute("message", "Dodano ocenę");
         model.addAttribute("link", "/view/mark/form");

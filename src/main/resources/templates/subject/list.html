@@ -24,6 +24,7 @@
     <ul>
         <li><a href="/">Strona główna</a></li>
         <li><a href="/view/students">Uczniowie</a></li>
+        <li><a href="/view/classes">Klasy</a></li>
         <li><a href="/view/teachers">Nauczyciele</a></li>
         <li><a href="/view/subjects">Przedmioty</a></li>
         <li><a href="/view/mark/form">oceny</a></li>
@@ -32,10 +33,7 @@
 <div id="content">
     <h1> Lista przedmiotów</h1>
     <ul>
-        <li th:each="element : ${list}"><span th:text="${element.name}+' '"></span><a th:href="'/view/subject/delete?id='+${element.id}" th:text="usuń"></a>
-        <a th:href="'/view/subject/addteacher?id=' + ${element.id}" >Dodaj nauczyciela</a>
-            <a th:href="'/view/subject/removeteacher?id=' + ${element.id}" >Usuń nauczyciela</a>
-        </li>
+        <li th:each="element : ${list}"><a th:href="'/view/subject?id=' + ${element.id}" th:text="${element.name}"></a></li>
     </ul>
     <form action="#" th:action="@{/view/subject/addsubject}" th:object="${formData}" method="post">
         <p>Nazwa: <input type="text" th:field="*{name}" /></p>

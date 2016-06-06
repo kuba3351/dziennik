@@ -24,6 +24,7 @@
     <ul>
         <li><a href="/">Strona główna</a></li>
         <li><a href="/view/students">Uczniowie</a></li>
+        <li><a href="/view/classes">Klasy</a></li>
         <li><a href="/view/teachers">Nauczyciele</a></li>
         <li><a href="/view/subjects">Przedmioty</a></li>
         <li><a href="/view/mark/form">oceny</a></li>
@@ -37,6 +38,7 @@
     <p th:inline="text"> Pesel: <b th:text="${student.pesel}"></b></p>
     <p th:inline="text"> Płeć: <b th:text="${student.sex}"></b></p>
     <p th:inline="text"> Data urodzenia: <b th:text="${student.birthday}"></b></p>
+    <p th:inline="text"> Klasa: <a th:href="'/view/class?id='+${student.clazz.id}" th:text="${student.clazz.name}"></a></p>
     <a th:href="'student/delete?id='+${student.id}">Usuń ucznia</a>
     <a th:href="'student/update?id='+${student.id}">Edytuj ucznia</a>
 </div>

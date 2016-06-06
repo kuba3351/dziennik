@@ -18,6 +18,15 @@ public class StudentFormDTO {
     private String address;
     private String birthday;
     private String sex;
+    private long class_id;
+
+    public long getClass_id() {
+        return class_id;
+    }
+
+    public void setClass_id(long class_id) {
+        this.class_id = class_id;
+    }
 
     public String getSex() {
         return sex;

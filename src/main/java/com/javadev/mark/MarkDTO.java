@@ -12,6 +12,15 @@ public class MarkDTO {
     private int mark;
     private long subjectId;
     private long studentId;
+    private String typ;
+
+    public String getTyp() {
+        return typ;
+    }
+
+    public void setTyp(String typ) {
+        this.typ = typ;
+    }
 
     public int getMark() {
         return this.mark;

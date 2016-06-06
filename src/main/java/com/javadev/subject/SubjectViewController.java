@@ -1,5 +1,6 @@
 package com.javadev.subject;
 
+import com.javadev.Class.ClassRepository;
 import com.javadev.student.StudentDTO;
 import com.javadev.student.StudentRepository;
 import com.javadev.teacher.Teacher;
@@ -27,6 +28,9 @@ public class SubjectViewController {
 
     @Autowired
     private TeacherRepository teacherRepository;
+
+    @Autowired
+    private ClassRepository classRepository;
 
     @RequestMapping(value = "/view/subjects", method = RequestMethod.GET)
     public String show(@ModelAttribute(value = "formData") SubjectDTO subjectDTO, Model model)
@@ -136,5 +140,19 @@ public class SubjectViewController {
         model.addAttribute("message", "Nauczyciel usunięty");
         model.addAttribute("link", "/view/subjects");
         return "message";
+    }
+    @RequestMapping(value = "/view/subject", method = RequestMethod.GET)
+    public String view(@RequestParam long id, Model model)
+    {
+        if(!subjectRepository.exists(id))
+        {
+            model.addAttribute("message", "Przedmiot nie znaleziony");
+            model.addAttribute("link", "/view/subjects");
+            return "message";
+        }
+        Subject subject = subjectRepository.getOne(id);
+        model.addAttribute("subject", subject);
+        model.addAttribute("classes", classRepository.findBySubject(subject));
+        return "subject/details";
     }
 }

@@ -24,6 +24,7 @@
     <ul>
         <li><a href="/">Strona główna</a></li>
         <li><a href="/view/students">Uczniowie</a></li>
+        <li><a href="/view/classes">Klasy</a></li>
         <li><a href="/view/teachers">Nauczyciele</a></li>
         <li><a href="/view/subjects">Przedmioty</a></li>
         <li><a href="/view/mark/form">oceny</a></li>
@@ -36,9 +37,9 @@
     <p th:inline="text"> Adres: <b th:text="${teacher.address}"></b></p>
     <p th:inline="text"> Pesel: <b th:text="${teacher.pesel}"></b></p>
     <p th:inline="text"> Data urodzenia: <b th:text="${teacher.birthday}"></b></p>
-    <p>Lista przedmiotów:</p>
+    <h2>Lista przedmiotów:</h2>
     <ul>
-        <li th:each="element : ${subjectlist}" th:text="${element.name}"></li>
+        <li th:each="element : ${subjectlist}"><a th:href="'/view/subject?id=' + ${element.id}" th:text="${element.name}"></a></li>
     </ul>
     <a th:href="'teacher/delete?id='+${teacher.id}">Usuń nauczyciela</a>
     <a th:href="'teacher/edit?id='+${teacher.id}">edytuj nauczyciela</a>

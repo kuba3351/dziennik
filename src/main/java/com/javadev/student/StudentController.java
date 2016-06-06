@@ -1,5 +1,6 @@
 package com.javadev.student;
 
+import com.javadev.Class.ClassRepository;
 import com.javadev.student.StudentRepository;
 import org.apache.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,19 @@ import org.apache.log4j.Logger;
 public class StudentController {
     @Autowired
     StudentRepository studentRepository;
+
+    @Autowired
+    ClassRepository classRepository;
+
     static Logger logger = LogManager.getLogger(StudentController.class.getName());
     @RequestMapping(value="/api/student",method=RequestMethod.POST)
     public String add(@RequestBody @Valid StudentDTO studentDTO)
     {
-        Student student = studentDTO.mapToEntity();
+        if(!classRepository.exists(studentDTO.getClass_id()))
+        {
+            return "class not found";
+        }
+        Student student = studentDTO.mapToEntity(classRepository.getOne(studentDTO.getClass_id()));
         logger.info("Request to add student: "+student.getName()+" "+student.getLastName());
         logger.info("Adding student. Given ID is: "+studentRepository.save(student).getId());
         return "saved";
@@ -64,12 +73,16 @@ public class StudentController {
     @RequestMapping(value="/api/student/{id}",method=RequestMethod.PUT)
     public String update(@PathVariable long id, @RequestBody StudentDTO studentDTO)
     {
-        if(!studentRepository.exists(id))
+        if(!studentRepository.exists(id)) {
             return "student not found";
-        else {
-            studentRepository.save(studentDTO.mapToEntity(id));
-            return "updated";
         }
+        if(!classRepository.exists(studentDTO.getClass_id()))
+        {
+            return "klasa nie znaleziona";
+        }
+        com.javadev.Class.Class clazz = classRepository.getOne(studentDTO.getClass_id());
+        studentRepository.save(studentDTO.mapToEntity(id, clazz));
+        return "updated";
     }
     @RequestMapping(value="/api/student/{id}",method= RequestMethod.GET)
     @ResponseBody

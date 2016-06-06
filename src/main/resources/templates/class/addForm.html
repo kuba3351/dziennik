@@ -31,9 +31,12 @@
     </ul>
 </div>
 <div id="content">
-    <h1 th:text="${message}"></h1>
-    <a th:href="${link}">Powrót</a>
-
+    <h1> Dodawanie ucznia </h1>
+    <form action="#" th:action="${actionaddress}" th:object="${formData}" method="post">
+        <p>Nazwa: <input type="text" th:field="*{name}" /></p>
+        <p>Rok rozpoczęcia nauki:: <input type="text" th:field="*{year}" /></p>
+        <input type="submit" name="dodaj" />
+    </form>
 </div>
 <div id="footer">
     <script src="footer.js"></script>

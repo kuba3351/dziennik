@@ -31,9 +31,11 @@
     </ul>
 </div>
 <div id="content">
-    <h1 th:text="${message}"></h1>
-    <a th:href="${link}">Powrót</a>
-
+    <h1> Lista klas:</h1>
+    <ul>
+        <li th:each="element : ${list}"> <a th:href="'class?id='+${element.id}" th:text="${element.name} + ' '"></a></li>
+    </ul>
+    <a href="class/add">Dodaj klasę</a>
 </div>
 <div id="footer">
     <script src="footer.js"></script>

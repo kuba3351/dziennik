@@ -1,5 +1,6 @@
 package com.javadev.student;
 
+import com.javadev.Class.ClassRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +27,9 @@ public class StudentViewController {
 
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private ClassRepository classRepository;
 
     @RequestMapping(value="/view/students", method = RequestMethod.GET)
     public String studentsListView(Model model)
@@ -63,13 +67,21 @@ public class StudentViewController {
     public String addForm(@ModelAttribute(value = "formData") StudentDTO studentDTO, Model model)
     {
         model.addAttribute("actionaddress","/view/student/addstudent");
+        model.addAttribute("clazz", classRepository.findAll());
         return "student/addForm";
     }
     @RequestMapping(value="/view/student/addstudent", method = RequestMethod.POST)
     public String addStudent(StudentFormDTO studentFormDTO, Model model)
     {
+        if(!classRepository.exists(studentFormDTO.getClass_id()))
+        {
+            model.addAttribute("message", "klasa nie znaleziona");
+            model.addAttribute("link", "/view/students");
+            return "message";
+        }
+        com.javadev.Class.Class clazz = classRepository.getOne(studentFormDTO.getClass_id());
         try {
-            studentRepository.save(studentFormDTO.mapToDTO().mapToEntity());
+            studentRepository.save(studentFormDTO.mapToDTO().mapToEntity(clazz));
         }
         catch(ParseException e)
         {
@@ -92,6 +104,7 @@ public class StudentViewController {
         }
         model.addAttribute("formData" ,StudentDTO.getDTO(studentRepository.getOne(id)).mapToFormDTO());
         model.addAttribute("actionaddress", "/view/student/updatestudent?id=" + id);
+        model.addAttribute("clazz", classRepository.findAll());
         return "student/addForm";
     }
     @RequestMapping(value="/view/student/updatestudent", method = RequestMethod.POST)
@@ -104,8 +117,15 @@ public class StudentViewController {
             return "message";
         }
         Student student = null;
+        if(!classRepository.exists(studentFormDTO.getClass_id()))
+        {
+            model.addAttribute("message", "klasa nie znaleziona");
+            model.addAttribute("link", "/view/students");
+            return "message";
+        }
+        com.javadev.Class.Class clazz = classRepository.getOne(studentFormDTO.getClass_id());
         try {
-            student = studentFormDTO.mapToDTO().mapToEntity();
+            student = studentFormDTO.mapToDTO().mapToEntity(clazz);
         } catch (ParseException e) {
             model.addAttribute("message", "źle wpisana data");
             model.addAttribute("link", "/view/students");

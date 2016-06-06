@@ -7,6 +7,15 @@ public class FormDTO {
     private long student;
     private long subject;
     private int mark;
+    private String typ;
+
+    public String getTyp() {
+        return typ;
+    }
+
+    public void setTyp(String typ) {
+        this.typ = typ;
+    }
 
     public int getMark() {
         return mark;

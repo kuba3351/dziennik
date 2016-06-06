@@ -2,10 +2,7 @@ package com.javadev.student;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -21,6 +18,16 @@ public class Student {
     private String pesel;
     private String address;
     private String sex;
+    @OneToOne
+    com.javadev.Class.Class clazz;
+
+    public com.javadev.Class.Class getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(com.javadev.Class.Class clazz) {
+        this.clazz = clazz;
+    }
 
     public String getSex() {
         return sex;

@@ -20,6 +20,15 @@ public class Mark {
     private Subject subject;
     @ManyToOne
     private Student student;
+    private String typ;
+
+    public String getTyp() {
+        return typ;
+    }
+
+    public void setTyp(String typ) {
+        this.typ = typ;
+    }
 
     public long getId() {
         return id;

@@ -31,9 +31,18 @@
     </ul>
 </div>
 <div id="content">
-    <h1 th:text="${message}"></h1>
-    <a th:href="${link}">Powrót</a>
-
+    <h1 th:text="${subject.name}"></h1>
+    <a th:href="'/view/subject/delete?id='+${subject.id}"> usuń przedmiot</a>
+    <h2>Lista nauczycieli</h2>
+    <ul>
+        <li th:each="element : ${subject.teachers}"> <a th:href="'teacher?id='+${element.id}" th:text="${element.name} + ' ' + ${element.lastName}"></a></li>
+    </ul>
+    <a th:href="'/view/subject/addteacher?id=' + ${subject.id}" >Dodaj nauczyciela</a>
+    <a th:href="'/view/subject/removeteacher?id=' + ${subject.id}" >Usuń nauczyciela</a>
+    <h2>Lista klas</h2>
+    <ul>
+        <li th:each="element : ${classes}"> <a th:href="'class?id='+${element.id}" th:text="${element.name} + ' '"></a></li>
+    </ul>
 </div>
 <div id="footer">
     <script src="footer.js"></script>

@@ -96,8 +96,6 @@ public class MarktViewController {
                 return "message";
             }
         }
-        System.out.println(mark.getTyp());
-        System.out.println(mark.getMark());
         if(mark.getMark() <= 5 && mark.getMark() >= 1 && (mark.getTyp().equals("kartkowka") || mark.getTyp().equals("sprawdzian") || mark.getTyp().equals("koncowa"))) {
             markRepository.save(mark);
         }

@@ -23,8 +23,7 @@ public class ClassDTO {
         this.year = year;
     }
 
-    public Class mapToEntity()
-    {
+    public Class mapToEntity() {
         Class clazz = new Class();
         clazz.setName(name);
         clazz.setYear(year);

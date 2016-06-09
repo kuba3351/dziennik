@@ -14,14 +14,13 @@ public class SubjectDTO {
         this.name = name;
     }
 
-    public Subject mapToEntity()
-    {
+    public Subject mapToEntity() {
         Subject subject = new Subject();
         subject.setName(this.getName());
         return subject;
     }
-    public Subject mapToEntity(long id)
-    {
+
+    public Subject mapToEntity(long id) {
         Subject subject = this.mapToEntity();
         subject.setId(id);
         return subject;

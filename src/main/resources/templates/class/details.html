@@ -1,11 +1,11 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <title>Dziennik</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="Description" contens="Dziennik szkolny" />
-    <meta name="Keywords" content="Dziennik, uczniowie, oceny" />
-    <meta name="Author" content="Jakub Sierżęga" />
-    <link rel="Stylesheet" type="text/css" href="/style.css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="Description" contens="Dziennik szkolny"/>
+    <meta name="Keywords" content="Dziennik, uczniowie, oceny"/>
+    <meta name="Author" content="Jakub Sierżęga"/>
+    <link rel="Stylesheet" type="text/css" href="/style.css"/>
 </head>
 <body>
 <div id="header">
@@ -38,7 +38,8 @@
     <a th:href="'class/update?id='+${clazz.id}">Edytuj klasę</a>
     <h2>Lista uczniów</h2>
     <ul>
-        <li th:each="element : ${students}"> <a th:href="'student?id='+${element.id}" th:text="${element.name} + ' ' + ${element.lastName}"></a></li>
+        <li th:each="element : ${students}"><a th:href="'student?id='+${element.id}"
+                                               th:text="${element.name} + ' ' + ${element.lastName}"></a></li>
     </ul>
 </div>
 <div id="footer">

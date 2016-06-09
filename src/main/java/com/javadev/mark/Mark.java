@@ -1,10 +1,9 @@
 package com.javadev.mark;
 
 import com.javadev.student.Student;
-import com.javadev.teacher.Teacher;
+import com.javadev.subject.Subject;
 
 import javax.persistence.*;
-import com.javadev.subject.Subject;
 
 /**
  * Created by kuba3 on 25.04.2016.

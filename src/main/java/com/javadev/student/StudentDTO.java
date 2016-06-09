@@ -41,8 +41,8 @@ public class StudentDTO {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    public Student mapToEntity(com.javadev.Class.Class clazz)
-    {
+
+    public Student mapToEntity(com.javadev.Class.Class clazz) {
         Student student = new Student();
         student.setName(this.getName());
         student.setLastName(this.getLastName());
@@ -53,15 +53,14 @@ public class StudentDTO {
         student.setClazz(clazz);
         return student;
     }
-    public Student mapToEntity(long id, com.javadev.Class.Class clazz)
-    {
+
+    public Student mapToEntity(long id, com.javadev.Class.Class clazz) {
         Student student = this.mapToEntity(clazz);
         student.setId(id);
         return student;
     }
 
-    public StudentFormDTO mapToFormDTO()
-    {
+    public StudentFormDTO mapToFormDTO() {
         StudentFormDTO studentFormDTO = new StudentFormDTO();
         studentFormDTO.setName(name);
         studentFormDTO.setLastName(lastName);
@@ -82,8 +81,7 @@ public class StudentDTO {
         this.sex = sex;
     }
 
-    public static StudentDTO getDTO(Student student)
-    {
+    public static StudentDTO getDTO(Student student) {
         StudentDTO studentDTO = new StudentDTO();
         studentDTO.setName(student.getName());
         studentDTO.setLastName(student.getLastName());

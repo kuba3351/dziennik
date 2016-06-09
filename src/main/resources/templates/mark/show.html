@@ -1,11 +1,11 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <title>Dziennik</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="Description" contens="Dziennik szkolny" />
-    <meta name="Keywords" content="Dziennik, uczniowie, oceny" />
-    <meta name="Author" content="Jakub Sierżęga" />
-    <link rel="Stylesheet" type="text/css" href="/style.css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="Description" contens="Dziennik szkolny"/>
+    <meta name="Keywords" content="Dziennik, uczniowie, oceny"/>
+    <meta name="Author" content="Jakub Sierżęga"/>
+    <link rel="Stylesheet" type="text/css" href="/style.css"/>
 </head>
 <body>
 <div id="header">
@@ -35,10 +35,10 @@
     <p th:inline="text"> Imię: <b th:text="${student.name}"></b></p>
     <p th:inline="text"> Nazwisko: <b th:text="${student.lastName}"></b></p>
     <p th:inline="text"> Przedmiot: <b th:text="${subject.name}"></b></p>
-    <p th:inline="text" > Kartkówka: <b th:each="element : ${kartkowka}" th:text="${element.mark}+' '"></b></p>
-    <p th:inline="text" > Sprawdzian: <b th:each="element : ${sprawdzian}" th:text="${element.mark}+' '"></b></p>
-    <p th:inline="text" > Ocena końcowa: <b th:each="element : ${koncowa}" th:text="${element.mark}+' '"></b></p>
-    <form action="#"  th:action="@{/view/mark/add}" th:object="${formData}" method="post">
+    <p th:inline="text"> Kartkówka: <b th:each="element : ${kartkowka}" th:text="${element.mark}+' '"></b></p>
+    <p th:inline="text"> Sprawdzian: <b th:each="element : ${sprawdzian}" th:text="${element.mark}+' '"></b></p>
+    <p th:inline="text"> Ocena końcowa: <b th:each="element : ${koncowa}" th:text="${element.mark}+' '"></b></p>
+    <form action="#" th:action="@{/view/mark/add}" th:object="${formData}" method="post">
         <p>Dodaj oceny:</p>
         <input type="hidden" th:field="*{student}" th:value="${student.id}"/>
         <input type="hidden" th:field="*{subject}" th:value="${subject.id}"/>
@@ -49,11 +49,11 @@
             <option th:value="4" th:text="4"></option>
             <option th:value="5" th:text="5"></option>
         </select>
-        <p>Typ: <input type="radio" th:field="*{typ}" th:value="kartkowka" /> Kartkówka
-            <input type="radio" th:field="*{typ}" th:value="sprawdzian" /> Sprawdzian
-            <input type="radio" th:field="*{typ}" th:value="koncowa" /> Ocena końcowa
+        <p>Typ: <input type="radio" th:field="*{typ}" th:value="kartkowka"/> Kartkówka
+            <input type="radio" th:field="*{typ}" th:value="sprawdzian"/> Sprawdzian
+            <input type="radio" th:field="*{typ}" th:value="koncowa"/> Ocena końcowa
         </p>
-        <input type="submit" name="dodaj" />
+        <input type="submit" name="dodaj"/>
     </form>
 </div>
 <div th:if="${error}" id="content">

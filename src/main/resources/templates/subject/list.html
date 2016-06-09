@@ -1,11 +1,11 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <title>Dziennik</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="Description" contens="Dziennik szkolny" />
-    <meta name="Keywords" content="Dziennik, uczniowie, oceny" />
-    <meta name="Author" content="Jakub Sierżęga" />
-    <link rel="Stylesheet" type="text/css" href="/style.css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="Description" contens="Dziennik szkolny"/>
+    <meta name="Keywords" content="Dziennik, uczniowie, oceny"/>
+    <meta name="Author" content="Jakub Sierżęga"/>
+    <link rel="Stylesheet" type="text/css" href="/style.css"/>
 </head>
 <body>
 <div id="header">
@@ -33,11 +33,12 @@
 <div id="content">
     <h1> Lista przedmiotów</h1>
     <ul>
-        <li th:each="element : ${list}"><a th:href="'/view/subject?id=' + ${element.id}" th:text="${element.name}"></a></li>
+        <li th:each="element : ${list}"><a th:href="'/view/subject?id=' + ${element.id}" th:text="${element.name}"></a>
+        </li>
     </ul>
     <form action="#" th:action="@{/view/subject/addsubject}" th:object="${formData}" method="post">
-        <p>Nazwa: <input type="text" th:field="*{name}" /></p>
-        <input type="submit" name="dodaj" />
+        <p>Nazwa: <input type="text" th:field="*{name}"/></p>
+        <input type="submit" name="dodaj"/>
     </form>
 </div>
 <div id="footer">

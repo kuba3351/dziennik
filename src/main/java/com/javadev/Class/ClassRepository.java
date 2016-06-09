@@ -1,7 +1,6 @@
 package com.javadev.Class;
 
 import com.javadev.subject.Subject;
-import com.javadev.teacher.Teacher;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

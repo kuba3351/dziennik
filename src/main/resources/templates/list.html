@@ -1,11 +1,11 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <title>Dziennik</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="Description" contens="Dziennik szkolny" />
-    <meta name="Keywords" content="Dziennik, uczniowie, oceny" />
-    <meta name="Author" content="Jakub Sierżęga" />
-    <link rel="Stylesheet" type="text/css" href="/style.css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="Description" contens="Dziennik szkolny"/>
+    <meta name="Keywords" content="Dziennik, uczniowie, oceny"/>
+    <meta name="Author" content="Jakub Sierżęga"/>
+    <link rel="Stylesheet" type="text/css" href="/style.css"/>
 </head>
 <body>
 <div id="header">
@@ -34,9 +34,12 @@
     <h1 th:text="${message}"></h1>
     <form action="#" th:action="${actionaddress}" th:object="${formData}" method="post">
         <select th:field="*{option}">
-            <option th:each="element : ${elements}" th:value="${element.id}" th:text="${element.name} +' ' + ${element.lastName}"></option>
-            </select>
-        <input type="submit" name="szukaj" />
+            <option th:if="not ${classes}" th:each="element : ${elements}" th:value="${element.id}"
+                    th:text="${element.name} +' ' + ${element.lastName}"></option>
+            <option th:if="${classes}" th:each="element : ${elements}" th:value="${element.id}"
+                    th:text="${element.name}"></option>
+        </select>
+        <input type="submit" name="szukaj"/>
     </form>
 </div>
 <div id="footer">

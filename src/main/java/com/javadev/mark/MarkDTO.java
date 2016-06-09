@@ -1,8 +1,6 @@
 package com.javadev.mark;
 
 import com.javadev.student.Student;
-import com.javadev.teacher.Teacher;
-
 import com.javadev.subject.Subject;
 
 /**
@@ -46,8 +44,7 @@ public class MarkDTO {
         this.studentId = studentId;
     }
 
-    public Mark mapToEntity(Student student, Subject subject)
-    {
+    public Mark mapToEntity(Student student, Subject subject) {
         Mark mark = new Mark();
         mark.setMark(this.mark);
         mark.setStudent(student);

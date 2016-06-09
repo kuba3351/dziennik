@@ -1,11 +1,11 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <title>Dziennik</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="Description" contens="Dziennik szkolny" />
-    <meta name="Keywords" content="Dziennik, uczniowie, oceny" />
-    <meta name="Author" content="Jakub Sierżęga" />
-    <link rel="Stylesheet" type="text/css" href="/style.css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="Description" contens="Dziennik szkolny"/>
+    <meta name="Keywords" content="Dziennik, uczniowie, oceny"/>
+    <meta name="Author" content="Jakub Sierżęga"/>
+    <link rel="Stylesheet" type="text/css" href="/style.css"/>
 </head>
 <body>
 <div id="header">
@@ -39,10 +39,11 @@
     <p th:inline="text"> Data urodzenia: <b th:text="${teacher.birthday}"></b></p>
     <h2>Lista przedmiotów:</h2>
     <ul>
-        <li th:each="element : ${subjectlist}"><a th:href="'/view/subject?id=' + ${element.id}" th:text="${element.name}"></a></li>
+        <li th:each="element : ${subjectlist}"><a th:href="'/view/subject?id=' + ${element.id}"
+                                                  th:text="${element.name}"></a></li>
     </ul>
     <a th:href="'teacher/delete?id='+${teacher.id}">Usuń nauczyciela</a>
-    <a th:href="'teacher/edit?id='+${teacher.id}">edytuj nauczyciela</a>
+    <a th:href="'teacher/updateteacher?id='+${teacher.id}">edytuj nauczyciela</a>
 </div>
 <div th:if="${error}" id="content">
     <p th:text="${error}"></p>

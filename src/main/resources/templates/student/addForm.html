@@ -1,11 +1,11 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <title>Dziennik</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="Description" contens="Dziennik szkolny" />
-    <meta name="Keywords" content="Dziennik, uczniowie, oceny" />
-    <meta name="Author" content="Jakub Sierżęga" />
-    <link rel="Stylesheet" type="text/css" href="/style.css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="Description" contens="Dziennik szkolny"/>
+    <meta name="Keywords" content="Dziennik, uczniowie, oceny"/>
+    <meta name="Author" content="Jakub Sierżęga"/>
+    <link rel="Stylesheet" type="text/css" href="/style.css"/>
 </head>
 <body>
 <div id="header">
@@ -33,19 +33,19 @@
 <div id="content">
     <h1> Dodawanie ucznia </h1>
     <form action="#" th:action="${actionaddress}" th:object="${formData}" method="post">
-        <p>Imię: <input type="text" th:field="*{name}" /></p>
-        <p>Nazwisko: <input type="text" th:field="*{lastName}" /></p>
-        <p>Adres: <input type="text" th:field="*{address}" /></p>
-        <p>Pesel: <input type="text" th:field="*{pesel}" /></p>
-        <p>Płeć: <input type="radio" th:field="*{sex}" th:value="Mężczyzna" /> Mężczyzna
-            <input type="radio" th:field="*{sex}" th:value="Kobieta" /> Kobieta
+        <p>Imię: <input type="text" th:field="*{name}"/></p>
+        <p>Nazwisko: <input type="text" th:field="*{lastName}"/></p>
+        <p>Adres: <input type="text" th:field="*{address}"/></p>
+        <p>Pesel: <input type="text" th:field="*{pesel}"/></p>
+        <p>Płeć: <input type="radio" th:field="*{sex}" th:value="Mężczyzna"/> Mężczyzna
+            <input type="radio" th:field="*{sex}" th:value="Kobieta"/> Kobieta
         </p>
-        <p>Data urodzenia (dd-mm-yyyy): <input type="text" th:field="*{birthday}" /></p>
+        <p>Data urodzenia (dd-mm-yyyy): <input type="text" th:field="*{birthday}"/></p>
         <p>Klasa:<select th:field="*{class_id}">
             <option th:each="element : ${clazz}" th:value="${element.id}" th:text="${element.name}"></option>
         </select>
         </p>
-        <input type="submit" name="dodaj" />
+        <input type="submit" name="dodaj"/>
     </form>
 </div>
 <div id="footer">

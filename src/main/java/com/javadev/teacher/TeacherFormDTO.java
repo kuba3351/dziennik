@@ -1,13 +1,7 @@
 package com.javadev.teacher;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.javadev.student.StudentFormDTO;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by kuba3 on 03.06.2016.
@@ -58,6 +52,7 @@ public class TeacherFormDTO {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
     public TeacherDTO mapToDTO() throws ParseException {
         TeacherDTO teacherDTO = new TeacherDTO();
         teacherDTO.setName(name);

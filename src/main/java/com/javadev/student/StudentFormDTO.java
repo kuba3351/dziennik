@@ -14,6 +14,24 @@ public class StudentFormDTO {
     private String birthday;
     private String sex;
     private long class_id;
+    private String login;
+    private String password;
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public long getClass_id() {
         return class_id;
@@ -56,6 +74,8 @@ public class StudentFormDTO {
         studentDTO.setSex(sex);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         studentDTO.setBirthday(simpleDateFormat.parse(birthday));
+        studentDTO.setLogin(login);
+        studentDTO.setPassword(password);
         return studentDTO;
     }
 

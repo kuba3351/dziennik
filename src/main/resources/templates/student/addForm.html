@@ -35,6 +35,8 @@
     <form action="#" th:action="${actionaddress}" th:object="${formData}" method="post">
         <p>Imię: <input type="text" th:field="*{name}"/></p>
         <p>Nazwisko: <input type="text" th:field="*{lastName}"/></p>
+        <p>Login: <input type="text" th:field="*{login}"/></p>
+        <p>Hasło: <input type="password" th:field="*{password}"/></p>
         <p>Adres: <input type="text" th:field="*{address}"/></p>
         <p>Pesel: <input type="text" th:field="*{pesel}"/></p>
         <p>Płeć: <input type="radio" th:field="*{sex}" th:value="Mężczyzna"/> Mężczyzna

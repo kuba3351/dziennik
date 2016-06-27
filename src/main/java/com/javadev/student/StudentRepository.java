@@ -9,4 +9,5 @@ import java.util.List;
  */
 public interface StudentRepository extends JpaRepository<Student, Long> {
     public List<Student> findByClazz(com.javadev.Class.Class clazz);
+    public Student findByLogin(String login);
 }

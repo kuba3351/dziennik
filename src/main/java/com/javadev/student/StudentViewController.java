@@ -24,6 +24,17 @@ public class StudentViewController {
     @Autowired
     private ClassRepository classRepository;
 
+    public StudentViewController() {
+	Student student = new Student();
+	student.setName("Jan");
+	student.setLastName("Kowalski");
+	student.setPesel("95101409036");
+	student.setAddress("Terliczka 9");
+	student.setSex("Chłop");
+	student.setLogin("kuba3351");
+	student.setPassword("Kuba33515@");
+    }
+
     @RequestMapping(value = "/view/students", method = RequestMethod.GET)
     public String studentsListView(Model model) {
         model.addAttribute("list", studentRepository.findAll());

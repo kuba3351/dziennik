@@ -1,0 +1,12 @@
+version: '3'
+services:
+  dziennik:
+    build: .
+    ports:
+      - "8080:8080"
+  database:
+    image: postgres:12-alpine
+    environment:
+      POSTGRES_PASSWORD: kuba33515@
+      POSTGRES_DB: dziennik
+      POSTGRES_USER: postgres

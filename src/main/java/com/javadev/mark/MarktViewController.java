@@ -36,12 +36,12 @@ public class MarktViewController {
     @RequestMapping(value = "/view/mark/show", method = RequestMethod.POST)
     public String show(@ModelAttribute(value = "formData") FormDTO formDTO, @RequestParam(value = "student") long
             student_id, @RequestParam(value = "subject") long subject_id, Model model) {
-        if (!studentRepository.exists(student_id) || !subjectRepository.exists(subject_id)) {
+        if (!studentRepository.existsById(student_id) || !subjectRepository.existsById(subject_id)) {
             model.addAttribute("error", "wrong data");
         }
         else {
-            Student student = studentRepository.getOne(student_id);
-            Subject subject = subjectRepository.getOne(subject_id);
+            Student student = studentRepository.findById(student_id).get();
+            Subject subject = subjectRepository.findById(subject_id).get();
             model.addAttribute("student", student);
             model.addAttribute("subject", subject);
             List<Mark> list = markRepository.findByStudent(student);
@@ -63,12 +63,12 @@ public class MarktViewController {
 
     @RequestMapping(value = "/view/mark/add", method = RequestMethod.POST)
     public String add(FormDTO formDTO, Model model) {
-        if (!subjectRepository.exists(formDTO.getSubject())) {
+        if (!subjectRepository.existsById(formDTO.getSubject())) {
             model.addAttribute("message", "Przedmiot nie znaleziony");
             model.addAttribute("link", "/view/mark/form");
             return "message";
         }
-        if (!studentRepository.exists(formDTO.getStudent())) {
+        if (!studentRepository.existsById(formDTO.getStudent())) {
             model.addAttribute("message", "Student nie znaleziony");
             model.addAttribute("link", "/view/mark/form");
             return "message";
@@ -76,9 +76,9 @@ public class MarktViewController {
         Mark mark = new Mark();
         mark.setMark(formDTO.getMark());
         mark.setTyp(formDTO.getTyp());
-        Student student = studentRepository.findOne(formDTO.getStudent());
+        Student student = studentRepository.findById(formDTO.getStudent()).get();
         mark.setStudent(student);
-        Subject subject = subjectRepository.findOne(formDTO.getSubject());
+        Subject subject = subjectRepository.findById(formDTO.getSubject()).get();
         mark.setSubject(subject);
         List<Mark> lista = markRepository.findByStudent(student);
         lista.retainAll(markRepository.findBySubject(subject));

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Created by kuba3 on 10.05.2016.
@@ -38,9 +40,9 @@ public class SubjectViewController {
 
     @RequestMapping(value = "/view/subject/delete", method = RequestMethod.GET)
     public String delete(@RequestParam long id, Model model) {
-        if (subjectRepository.exists(id)) {
+        if (subjectRepository.existsById(id)) {
             try {
-                subjectRepository.delete(id);
+                subjectRepository.deleteById(id);
             } catch (Exception e) {
                 model.addAttribute("message","bąd bazy danych");
                 model.addAttribute("link", "/view/classes");
@@ -68,13 +70,13 @@ public class SubjectViewController {
     @RequestMapping(value = "/view/subject/addteacher", method = RequestMethod.GET)
     public String addTeacher(@ModelAttribute(value = "formData") ListForm listForm, @RequestParam long id, Model
             model) {
-        List<Teacher> list = teacherRepository.findAll();
-        if (!subjectRepository.exists(id)) {
+        List<Teacher> list = StreamSupport.stream(teacherRepository.findAll().spliterator(), false).collect(Collectors.toList());
+        if (!subjectRepository.existsById(id)) {
             model.addAttribute("message", "Przedmiot nie znaleziony");
             model.addAttribute("link", "/view/subjects");
             return "message";
         }
-        Subject subject = subjectRepository.findOne(id);
+        Subject subject = subjectRepository.findById(id).get();
         list.removeAll(subject.getTeachers());
         model.addAttribute("elements", list);
         return "list";
@@ -82,18 +84,18 @@ public class SubjectViewController {
 
     @RequestMapping(value = "/view/subject/addteacher", method = RequestMethod.POST)
     public String addTeacher(@RequestParam long id, ListForm listForm, Model model) {
-        if (!subjectRepository.exists(id)) {
+        if (!subjectRepository.existsById(id)) {
             model.addAttribute("message", "Przedmiot nie znaleziony");
             model.addAttribute("link", "/view/subjects");
             return "message";
         }
-        if (!teacherRepository.exists(listForm.getOption())) {
+        if (!teacherRepository.existsById(listForm.getOption())) {
             model.addAttribute("message", "Nauczyciel nie znaleziony");
             model.addAttribute("link", "/view/subjects");
             return "message";
         }
-        Subject subject = subjectRepository.getOne(id);
-        subject.getTeachers().add(teacherRepository.getOne(listForm.getOption()));
+        Subject subject = subjectRepository.findById(id).get();
+        subject.getTeachers().add(teacherRepository.findById(listForm.getOption()).get());
         subjectRepository.save(subject);
         model.addAttribute("message", "Nauczyciel dodany");
         model.addAttribute("link", "/view/subjects");
@@ -103,12 +105,12 @@ public class SubjectViewController {
     @RequestMapping(value = "/view/subject/removeteacher", method = RequestMethod.GET)
     public String removeTeacher(@ModelAttribute(value = "formData") ListForm listForm, @RequestParam long id, Model
             model) {
-        if (!subjectRepository.exists(id)) {
+        if (!subjectRepository.existsById(id)) {
             model.addAttribute("message", "Przedmiot nie znaleziony");
             model.addAttribute("link", "/view/subjects");
             return "message";
         }
-        Subject subject = subjectRepository.findOne(id);
+        Subject subject = subjectRepository.findById(id).get();
         List<Teacher> list = subject.getTeachers();
         model.addAttribute("elements", list);
         return "list";
@@ -116,18 +118,18 @@ public class SubjectViewController {
 
     @RequestMapping(value = "/view/subject/removeteacher", method = RequestMethod.POST)
     public String removeTeacher(@RequestParam long id, ListForm listForm, Model model) {
-        if (!subjectRepository.exists(id)) {
+        if (!subjectRepository.existsById(id)) {
             model.addAttribute("message", "Przedmiot nie znaleziony");
             model.addAttribute("link", "/view/subjects");
             return "message";
         }
-        if (!teacherRepository.exists(listForm.getOption())) {
+        if (!teacherRepository.existsById(listForm.getOption())) {
             model.addAttribute("message", "Nauczyciel nie znaleziony");
             model.addAttribute("link", "/view/subjects");
             return "message";
         }
-        Subject subject = subjectRepository.getOne(id);
-        subject.getTeachers().remove(teacherRepository.getOne(listForm.getOption()));
+        Subject subject = subjectRepository.findById(id).get();
+        subject.getTeachers().remove(teacherRepository.findById(listForm.getOption()).get());
         subjectRepository.save(subject);
         model.addAttribute("message", "Nauczyciel usunięty");
         model.addAttribute("link", "/view/subjects");
@@ -136,12 +138,12 @@ public class SubjectViewController {
 
     @RequestMapping(value = "/view/subject", method = RequestMethod.GET)
     public String view(@RequestParam long id, Model model) {
-        if (!subjectRepository.exists(id)) {
+        if (!subjectRepository.existsById(id)) {
             model.addAttribute("message", "Przedmiot nie znaleziony");
             model.addAttribute("link", "/view/subjects");
             return "message";
         }
-        Subject subject = subjectRepository.getOne(id);
+        Subject subject = subjectRepository.findById(id).get();
         model.addAttribute("subject", subject);
         model.addAttribute("classes", classRepository.findBySubject(subject));
         return "subject/details";
@@ -150,13 +152,13 @@ public class SubjectViewController {
     @RequestMapping(value = "/view/subject/addclass", method = RequestMethod.GET)
     public String addClassForm(@RequestParam long id, @ModelAttribute(value = "formData") ListForm listForm, Model
             model) {
-        if (!subjectRepository.exists(id)) {
+        if (!subjectRepository.existsById(id)) {
             model.addAttribute("error", "przedmiot nie znaleziony");
             model.addAttribute("link", "/view/subjects");
             return "message";
         }
-        List<Class> list = classRepository.findAll();
-        list.removeAll(classRepository.findBySubject(subjectRepository.getOne(id)));
+        List<Class> list = StreamSupport.stream(classRepository.findAll().spliterator(), true).collect(Collectors.toList());
+        list.removeAll(classRepository.findBySubject(subjectRepository.findById(id).get()));
         model.addAttribute("elements", list);
         model.addAttribute("classes", 1);
         return "list";
@@ -164,18 +166,18 @@ public class SubjectViewController {
 
     @RequestMapping(value = "/view/subject/addclass", method = RequestMethod.POST)
     public String addClass(@RequestParam long id, ListForm listForm, Model model) {
-        if (!subjectRepository.exists(id)) {
+        if (!subjectRepository.existsById(id)) {
             model.addAttribute("error", "przedmiot nie znaleziony");
             model.addAttribute("link", "/view/subjects");
             return "message";
         }
-        if (!classRepository.exists(listForm.getOption())) {
+        if (!classRepository.existsById(listForm.getOption())) {
             model.addAttribute("error", "klasa nie znaleziona");
             model.addAttribute("link", "/view/subjects");
             return "message";
         }
-        Class clazz = classRepository.findOne(listForm.getOption());
-        clazz.getSubject().add(subjectRepository.findOne(id));
+        Class clazz = classRepository.findById(listForm.getOption()).get();
+        clazz.getSubject().add(subjectRepository.findById(id).get());
         classRepository.save(clazz);
         model.addAttribute("message", "Dodano klasę");
         model.addAttribute("link", "/view/subjects");
@@ -185,12 +187,12 @@ public class SubjectViewController {
     @RequestMapping(value = "/view/subject/removeclass", method = RequestMethod.GET)
     public String removeClassForm(@RequestParam long id, @ModelAttribute(value = "formData") ListForm listForm, Model
             model) {
-        if (!subjectRepository.exists(id)) {
+        if (!subjectRepository.existsById(id)) {
             model.addAttribute("error", "przedmiot nie znaleziony");
             model.addAttribute("link", "/view/subjects");
             return "message";
         }
-        List<Class> list = classRepository.findBySubject(subjectRepository.getOne(id));
+        List<Class> list = classRepository.findBySubject(subjectRepository.findById(id).get());
         model.addAttribute("elements", list);
         model.addAttribute("classes", 1);
         return "list";
@@ -198,18 +200,18 @@ public class SubjectViewController {
 
     @RequestMapping(value = "/view/subject/removeclass", method = RequestMethod.POST)
     public String removeClass(@RequestParam long id, ListForm listForm, Model model) {
-        if (!subjectRepository.exists(id)) {
+        if (!subjectRepository.existsById(id)) {
             model.addAttribute("error", "przedmiot nie znaleziony");
             model.addAttribute("link", "/view/subjects");
             return "message";
         }
-        if (!classRepository.exists(listForm.getOption())) {
+        if (!classRepository.existsById(listForm.getOption())) {
             model.addAttribute("error", "klasa nie znaleziona");
             model.addAttribute("link", "/view/subjects");
             return "message";
         }
-        Class clazz = classRepository.findOne(listForm.getOption());
-        clazz.getSubject().remove(subjectRepository.findOne(id));
+        Class clazz = classRepository.findById(listForm.getOption()).get();
+        clazz.getSubject().remove(subjectRepository.findById(id).get());
         classRepository.save(clazz);
         model.addAttribute("message", "Usunięto klasę");
         model.addAttribute("link", "/view/subjects");

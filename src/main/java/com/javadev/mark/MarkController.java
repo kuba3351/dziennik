@@ -38,10 +38,10 @@ public class MarkController {
 
     @RequestMapping(value = "/api/mark", method = RequestMethod.POST)
     public ResponseEntity add(@RequestBody @Valid MarkDTO markDTO) {
-        if (studentRepository.exists(markDTO.getStudentId()) && subjectRepository.exists(markDTO.getSubjectId()) &&
+        if (studentRepository.existsById(markDTO.getStudentId()) && subjectRepository.existsById(markDTO.getSubjectId()) &&
                 markDTO.getMark() >= 1 && markDTO.getMark() <= 6) {
-            Mark mark = markDTO.mapToEntity(studentRepository.getOne(markDTO.getStudentId()), subjectRepository
-                    .getOne(markDTO.getSubjectId()));
+            Mark mark = markDTO.mapToEntity(studentRepository.findById(markDTO.getStudentId()).get(), subjectRepository
+                    .findById(markDTO.getSubjectId()).get());
             logger.info("Request to add templates.mark: " + markDTO.getMark() + " with student ID: " + markDTO
                     .getStudentId() + " subject ID:" + markDTO.getSubjectId());
             Mark save = markRepository.save(mark);
@@ -60,9 +60,9 @@ public class MarkController {
 
     @RequestMapping(value = "/api/mark/{id}", method = RequestMethod.DELETE)
     public String delete(@PathVariable long id) {
-        if (markRepository.exists(id)) {
+        if (markRepository.existsById(id)) {
             logger.info("Request to delete templates.mark with ID: " + id);
-            markRepository.delete(id);
+            markRepository.deleteById(id);
             return "deleted";
         }
         else {
@@ -75,11 +75,11 @@ public class MarkController {
     public List<Mark> find(@RequestBody MarkDTO markDTO) {
         List<Mark> list = markRepository.findAll();
         if (markDTO.getStudentId() != 0) {
-            Student student = studentRepository.getOne(markDTO.getStudentId());
+            Student student = studentRepository.findById(markDTO.getStudentId()).get();
             list.retainAll(markRepository.findByStudent(student));
         }
         if (markDTO.getSubjectId() != 0) {
-            Subject subject = subjectRepository.getOne(markDTO.getSubjectId());
+            Subject subject = subjectRepository.findById(markDTO.getSubjectId()).get();
             list.retainAll(markRepository.findBySubject(subject));
         }
         return list;

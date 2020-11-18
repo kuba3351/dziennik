@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Created by jakub on 27.06.16.
@@ -25,6 +27,6 @@ public class StudentDetailsService implements UserDetailsService {
         if(student == null)
             throw new UsernameNotFoundException("Student not found");
         else
-            return new StudentUserDetails(studentRepository.findAll(), student);
+            return new StudentUserDetails(StreamSupport.stream(studentRepository.findAll().spliterator(), false).collect(Collectors.toList()), student);
     }
 }

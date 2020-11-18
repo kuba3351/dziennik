@@ -12,8 +12,7 @@ import javax.persistence.*;
 public class Mark {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private
-    long id;
+    private Long id;
     private int mark;
     @ManyToOne
     private Subject subject;
@@ -29,11 +28,11 @@ public class Mark {
         this.typ = typ;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

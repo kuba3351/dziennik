@@ -12,7 +12,7 @@ import java.util.List;
 public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private long id;
+    private Long id;
     private String name;
     @ManyToMany
     List<Teacher> teachers;
@@ -25,11 +25,11 @@ public class Subject {
         this.teachers = teachers;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

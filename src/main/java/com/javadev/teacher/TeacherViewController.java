@@ -32,8 +32,8 @@ public class TeacherViewController {
 
     @RequestMapping(value = "/view/teacher", method = RequestMethod.GET)
     public String teacherDetails(@RequestParam long id, Model model) {
-        if (teacherRepository.exists(id)) {
-            Teacher teacher = teacherRepository.getOne(id);
+        if (teacherRepository.existsById(id)) {
+            Teacher teacher = teacherRepository.findById(id).get();
             model.addAttribute("teacher", teacher);
             model.addAttribute("subjectlist", subjectRepository.findByTeachers(teacher));
             return "teacher/details";
@@ -44,9 +44,9 @@ public class TeacherViewController {
 
     @RequestMapping(value = "/view/teacher/delete", method = RequestMethod.GET)
     public String delete(@RequestParam long id, Model model) {
-        if (teacherRepository.exists(id)) {
+        if (teacherRepository.existsById(id)) {
             try {
-                teacherRepository.delete(id);
+                teacherRepository.deleteById(id);
             } catch (Exception e) {
                 model.addAttribute("message","bąd bazy danych");
                 model.addAttribute("link", "/view/classes");
@@ -81,18 +81,18 @@ public class TeacherViewController {
 
     @RequestMapping(value = "/view/teacher/updateteacher", method = RequestMethod.GET)
     public String update(@RequestParam long id, Model model) {
-        if (!teacherRepository.exists(id)) {
+        if (!teacherRepository.existsById(id)) {
             model.addAttribute("message", "nauczyciel nie znaleziony");
             model.addAttribute("link", "/view/teachers");
             return "message";
         }
-        model.addAttribute("formData", TeacherDTO.getDTO(teacherRepository.getOne(id)).mapToFormDTO());
+        model.addAttribute("formData", TeacherDTO.getDTO(teacherRepository.findById(id).get()).mapToFormDTO());
         return "teacher/addForm";
     }
 
     @RequestMapping(value = "/view/teacher/updateteacher", method = RequestMethod.POST)
     public String update(TeacherFormDTO teacherFormDTO, @RequestParam long id, Model model) {
-        if (!teacherRepository.exists(id)) {
+        if (!teacherRepository.existsById(id)) {
             model.addAttribute("message", "Nauczyciel nie znaleziony");
             model.addAttribute("link", "/view/teachers");
             return "message";

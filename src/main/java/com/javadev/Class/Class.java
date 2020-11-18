@@ -15,7 +15,7 @@ import java.util.List;
 public class Class {
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
     private String name;
     private int year;
     @ManyToMany
@@ -33,11 +33,11 @@ public class Class {
         return year;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

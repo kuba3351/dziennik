@@ -1,6 +1,7 @@
 package com.javadev.Class;
 
 import com.javadev.student.StudentRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,10 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import static net.logstash.logback.argument.StructuredArguments.keyValue;
+
 /**
  * Created by kuba3 on 06.06.2016.
  */
 @Controller
+@Slf4j
 public class ClassViewController {
 
     @Autowired
@@ -29,7 +33,7 @@ public class ClassViewController {
 
     @RequestMapping(value = "/view/class/add", method = RequestMethod.GET)
     public String add(@ModelAttribute(value = "formData") ClassDTO classDTO, Model model) {
-        return "/class/addForm";
+        return "class/addform";
     }
 
     @RequestMapping(value = "/view/class/add", method = RequestMethod.POST)
@@ -40,6 +44,7 @@ public class ClassViewController {
         classRepository.save(clazz);
         model.addAttribute("message", "Klasa dodana");
         model.addAttribute("link", "/view/classes");
+        log.info("Class added {}", keyValue("class", classDTO.getName()));
         return "message";
     }
 
@@ -51,6 +56,7 @@ public class ClassViewController {
             return "message";
         }
         try {
+            log.info("Class deleted! {}", keyValue("class", classRepository.findById(id).get().getName()));
             classRepository.deleteById(id);
             model.addAttribute("message", "Klasa usunięta");
             model.addAttribute("link", "/view/classes");
@@ -84,7 +90,7 @@ public class ClassViewController {
             return "message";
         }
         model.addAttribute("formData", classRepository.findById(id).get());
-        return "/class/addForm";
+        return "addform";
     }
 
     @RequestMapping(value = "/view/class/update", method = RequestMethod.POST)
@@ -94,6 +100,7 @@ public class ClassViewController {
         clazz.setId(id);
         clazz.setYear(classDTO.getYear());
         classRepository.save(clazz);
+        log.info("Class updated {}", keyValue("class", classDTO.getName()));
         model.addAttribute("message", "Zmieniono klasę");
         model.addAttribute("link", "/view/classes");
         return "message";

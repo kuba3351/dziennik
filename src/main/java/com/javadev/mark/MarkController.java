@@ -5,6 +5,7 @@ import com.javadev.student.StudentRepository;
 import com.javadev.subject.Subject;
 import com.javadev.subject.SubjectRepository;
 import com.javadev.teacher.TeacherRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import java.util.List;
  * Created by kuba3 on 25.04.2016.
  */
 @RestController
+@Slf4j
 public class MarkController {
 
     @Autowired
@@ -34,21 +36,19 @@ public class MarkController {
     @Autowired
     SubjectRepository subjectRepository;
 
-    Logger logger = LogManager.getLogger(MarkController.class.getName());
-
     @RequestMapping(value = "/api/mark", method = RequestMethod.POST)
     public ResponseEntity add(@RequestBody @Valid MarkDTO markDTO) {
         if (studentRepository.existsById(markDTO.getStudentId()) && subjectRepository.existsById(markDTO.getSubjectId()) &&
                 markDTO.getMark() >= 1 && markDTO.getMark() <= 6) {
             Mark mark = markDTO.mapToEntity(studentRepository.findById(markDTO.getStudentId()).get(), subjectRepository
                     .findById(markDTO.getSubjectId()).get());
-            logger.info("Request to add templates.mark: " + markDTO.getMark() + " with student ID: " + markDTO
+            log.info("Request to add templates.mark: " + markDTO.getMark() + " with student ID: " + markDTO
                     .getStudentId() + " subject ID:" + markDTO.getSubjectId());
             Mark save = markRepository.save(mark);
-            logger.info(String.format("Addning with ID:%s", save.getId()));
+            log.info(String.format("Addning with ID:%s", save.getId()));
             return new ResponseEntity("Accepted", HttpStatus.ACCEPTED);
         }
-        logger.warn("Bad Request to add templates.mark: " + markDTO.getMark() + " with student ID: " + markDTO
+        log.warn("Bad Request to add templates.mark: " + markDTO.getMark() + " with student ID: " + markDTO
                 .getStudentId() + " subject ID:" + markDTO.getSubjectId());
         return new ResponseEntity("Bad request", HttpStatus.BAD_REQUEST);
     }
@@ -61,12 +61,12 @@ public class MarkController {
     @RequestMapping(value = "/api/mark/{id}", method = RequestMethod.DELETE)
     public String delete(@PathVariable long id) {
         if (markRepository.existsById(id)) {
-            logger.info("Request to delete templates.mark with ID: " + id);
+            log.info("Request to delete templates.mark with ID: " + id);
             markRepository.deleteById(id);
             return "deleted";
         }
         else {
-            logger.warn("Request to delete templates.mark with ID: " + id + " whitch is not found!");
+            log.warn("Request to delete templates.mark with ID: " + id + " whitch is not found!");
             return "templates.mark not found";
         }
     }

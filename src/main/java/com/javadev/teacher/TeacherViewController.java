@@ -1,6 +1,7 @@
 package com.javadev.teacher;
 
 import com.javadev.subject.SubjectRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,10 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.ParseException;
 
+import static net.logstash.logback.argument.StructuredArguments.keyValue;
+
 /**
  * Created by kuba3 on 10.05.2016.
  */
 
+@Slf4j
 @Controller
 public class TeacherViewController {
 
@@ -46,6 +50,8 @@ public class TeacherViewController {
     public String delete(@RequestParam long id, Model model) {
         if (teacherRepository.existsById(id)) {
             try {
+                Teacher teacher = teacherRepository.findById(id).get();
+                log.info("teacher deleted! {}", keyValue("teacher", teacher.getName() + " " + teacher.getLastName()));
                 teacherRepository.deleteById(id);
             } catch (Exception e) {
                 model.addAttribute("message","bąd bazy danych");
@@ -76,6 +82,7 @@ public class TeacherViewController {
         }
         model.addAttribute("message", "Nauczyciel dodany");
         model.addAttribute("link", "/view/teachers");
+        log.info("teacher added! {}", keyValue("teacher", teacherFormDTO.getName() + " " + teacherFormDTO.getLastName()));
         return "message";
     }
 
@@ -86,7 +93,9 @@ public class TeacherViewController {
             model.addAttribute("link", "/view/teachers");
             return "message";
         }
-        model.addAttribute("formData", TeacherDTO.getDTO(teacherRepository.findById(id).get()).mapToFormDTO());
+        Teacher teacher = teacherRepository.findById(id).get();
+        model.addAttribute("formData", TeacherDTO.getDTO(teacher).mapToFormDTO());
+        log.info("teacher updated! {}", keyValue("teacher", teacher.getName() + " " + teacher.getLastName()));
         return "teacher/addForm";
     }
 
@@ -107,6 +116,7 @@ public class TeacherViewController {
         teacherRepository.save(teacher);
         model.addAttribute("message", "nauczyciel zmieniony");
         model.addAttribute("link", "/view/teachers");
+        log.info("teacher updated! {}", keyValue("teacher", teacher.getName()));
         return "message";
     }
 }

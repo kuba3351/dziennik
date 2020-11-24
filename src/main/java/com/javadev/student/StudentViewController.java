@@ -2,6 +2,7 @@ package com.javadev.student;
 
 import com.javadev.Class.Class;
 import com.javadev.Class.ClassRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,11 +15,14 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static net.logstash.logback.argument.StructuredArguments.keyValue;
+
 /**
  * Created by kuba3 on 10.05.2016.
  */
 
 @Controller
+@Slf4j
 public class StudentViewController {
 
     private StudentRepository studentRepository;
@@ -80,6 +84,7 @@ public class StudentViewController {
                 studentRepository.deleteById(id);
                 model.addAttribute("message", "Student usunięty");
                 model.addAttribute("link", "/view/students");
+                log.info("Student deleted! {}", keyValue("student", student.getName() + " " + student.getLastName()));
             }
             catch (Exception e) {
                 model.addAttribute("message","bąd bazy danych");
@@ -114,6 +119,7 @@ public class StudentViewController {
             }
             model.addAttribute("message", "Student dodany");
             model.addAttribute("link", "/view/students");
+            log.info("Student added! {}", keyValue("student", studentFormDTO.getName() + " " + studentFormDTO.getLastName()));
         });
         return "message";
     }
@@ -125,8 +131,10 @@ public class StudentViewController {
             model.addAttribute("link", "/view/students");
             return "message";
         }
-        model.addAttribute("formData", StudentDTO.getDTO(studentRepository.findById(id).get()).mapToFormDTO());
+        Student student = studentRepository.findById(id).get();
+        model.addAttribute("formData", StudentDTO.getDTO(student).mapToFormDTO());
         model.addAttribute("clazz", classRepository.findAll());
+        log.info("Student updated! {}", keyValue("student", student.getName() + " " + student.getLastName()));
         return "student/addForm";
     }
 
@@ -137,7 +145,7 @@ public class StudentViewController {
             model.addAttribute("link", "/view/students");
             return "message";
         }
-        Student student = null;
+        Student student;
         if (!classRepository.existsById(studentFormDTO.getClass_id())) {
             model.addAttribute("message", "klasa nie znaleziona");
             model.addAttribute("link", "/view/students");
@@ -156,6 +164,8 @@ public class StudentViewController {
             studentRepository.save(student);
             model.addAttribute("message", "Student zmieniony");
             model.addAttribute("link", "/view/students");
+            Student student1 = studentRepository.findById(id).get();
+            log.info("Student updated! {}", keyValue("student", student1.getName() + " " + student.getLastName()));
         }
         return "message";
     }

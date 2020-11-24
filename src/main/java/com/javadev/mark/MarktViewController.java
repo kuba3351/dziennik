@@ -4,6 +4,7 @@ import com.javadev.student.Student;
 import com.javadev.student.StudentRepository;
 import com.javadev.subject.Subject;
 import com.javadev.subject.SubjectRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.logstash.logback.argument.StructuredArguments.keyValue;
+
 @Controller
+@Slf4j
 public class MarktViewController {
     @Autowired
     MarkRepository markRepository;
@@ -30,7 +34,7 @@ public class MarktViewController {
     public String form(@ModelAttribute(value = "formData") FormDTO formDTO, Model model) {
         model.addAttribute("students", studentRepository.findAll());
         model.addAttribute("subjects", subjectRepository.findAll());
-        return "/mark/form";
+        return "mark/form";
     }
 
     @RequestMapping(value = "/view/mark/show", method = RequestMethod.POST)
@@ -58,7 +62,7 @@ public class MarktViewController {
             model.addAttribute("sprawdzian", sprawdzian);
             model.addAttribute("koncowa", koncowa);
         }
-        return "/mark/show";
+        return "mark/show";
     }
 
     @RequestMapping(value = "/view/mark/add", method = RequestMethod.POST)
@@ -84,19 +88,19 @@ public class MarktViewController {
         lista.retainAll(markRepository.findBySubject(subject));
         if (formDTO.getTyp().equals("koncowa")) {
             if (lista.isEmpty()) {
-                model.addAttribute("message", "Zdaje się, że najpierw dajemy oceny cząstkowe");
+                model.addAttribute("message", "Nie można wystawić oceny końcowej bez ocen cząstkowych");
                 model.addAttribute("link", "/view/mark/form");
                 return "message";
             }
         }
         for (Mark mark1 : lista) {
             if (mark1.getTyp().equals("koncowa")) {
-                model.addAttribute("message", "Zdaje się, że nie wystawiamy już ocen po wystawieniu końcowej");
+                model.addAttribute("message", "Nie można wytstawić oceny cząstkowej po wystawieniu końcowej");
                 model.addAttribute("link", "/view/mark/form");
                 return "message";
             }
         }
-        if(mark.getMark() <= 5 && mark.getMark() >= 1 && (mark.getTyp().equals("kartkowka") || mark.getTyp().equals("sprawdzian") || mark.getTyp().equals("koncowa"))) {
+        if(mark.getMark() <= 6 && mark.getMark() >= 1 && (mark.getTyp().equals("kartkowka") || mark.getTyp().equals("sprawdzian") || mark.getTyp().equals("koncowa"))) {
             markRepository.save(mark);
         }
         else
@@ -107,6 +111,11 @@ public class MarktViewController {
         }
         model.addAttribute("message", "Dodano ocenę");
         model.addAttribute("link", "/view/mark/form");
+        log.info("Mark added {} {} {} {}",
+                keyValue("mark", mark.getMark()),
+                keyValue("student", mark.getStudent().getName() + " " + student.getLastName()),
+                keyValue("subject", mark.getSubject().getName()),
+                keyValue("type", mark.getTyp()));
         return "message";
     }
 }

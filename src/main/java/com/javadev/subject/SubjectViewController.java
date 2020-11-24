@@ -4,6 +4,7 @@ import com.javadev.Class.Class;
 import com.javadev.Class.ClassRepository;
 import com.javadev.teacher.Teacher;
 import com.javadev.teacher.TeacherRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,11 +17,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static net.logstash.logback.argument.StructuredArguments.keyValue;
+
 /**
  * Created by kuba3 on 10.05.2016.
  */
 
 @Controller
+@Slf4j
 public class SubjectViewController {
 
     @Autowired
@@ -35,7 +39,7 @@ public class SubjectViewController {
     @RequestMapping(value = "/view/subjects", method = RequestMethod.GET)
     public String show(@ModelAttribute(value = "formData") SubjectDTO subjectDTO, Model model) {
         model.addAttribute("list", subjectRepository.findAll());
-        return "/subject/list";
+        return "subject/list";
     }
 
     @RequestMapping(value = "/view/subject/delete", method = RequestMethod.GET)
@@ -50,6 +54,7 @@ public class SubjectViewController {
             }
             model.addAttribute("message", "Przedmiot usunięty");
             model.addAttribute("link", "/view/subjects");
+            log.info("Subject deleted!");
             return "message";
         }
         model.addAttribute("message", "Przedmiot nie znaleziony");
@@ -64,6 +69,7 @@ public class SubjectViewController {
         subjectRepository.save(subjectDTO.mapToEntity());
         model.addAttribute("message", "Przedmiot dodany");
         model.addAttribute("link", "/view/subjects");
+        log.info("subject added! {}", keyValue("subject", subjectDTO.getName()));
         return "message";
     }
 
@@ -99,6 +105,7 @@ public class SubjectViewController {
         subjectRepository.save(subject);
         model.addAttribute("message", "Nauczyciel dodany");
         model.addAttribute("link", "/view/subjects");
+        log.info("teacher added to subject {}", keyValue("subject", subject.getName()));
         return "message";
     }
 
@@ -113,6 +120,7 @@ public class SubjectViewController {
         Subject subject = subjectRepository.findById(id).get();
         List<Teacher> list = subject.getTeachers();
         model.addAttribute("elements", list);
+        log.info("teacher removed from subject {}", keyValue("subject", subject.getName()));
         return "list";
     }
 
@@ -181,6 +189,7 @@ public class SubjectViewController {
         classRepository.save(clazz);
         model.addAttribute("message", "Dodano klasę");
         model.addAttribute("link", "/view/subjects");
+        log.info("class added from subject {}", keyValue("subject", clazz.getSubject()));
         return "message";
     }
 
@@ -215,6 +224,7 @@ public class SubjectViewController {
         classRepository.save(clazz);
         model.addAttribute("message", "Usunięto klasę");
         model.addAttribute("link", "/view/subjects");
+        log.info("class removed from subject {}", keyValue("subject", clazz.getSubject()));
         return "message";
     }
 }
